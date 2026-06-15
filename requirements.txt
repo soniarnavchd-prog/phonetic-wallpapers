@@ -1,0 +1,10 @@
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+sqlalchemy==2.0.23
+python-dotenv==1.0.0
+cloudinary==1.36.0
+pillow==10.1.0
+numpy==1.26.2
+requests==2.31.0
+pydantic==2.5.0
+python-multipart==0.0.6
