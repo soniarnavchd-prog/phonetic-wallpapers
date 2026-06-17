@@ -396,6 +396,63 @@ def privacy():
         }
     </style>
 </head>
+
+<!-- Emergency fix if app.js fails -->
+<script>
+    // Fallback if main app.js crashes
+    window.addEventListener('error', function(e) {
+        console.error('Global error:', e.message);
+    });
+    
+    // Check if app loaded
+    setTimeout(function() {
+        if (typeof wallpapers === 'undefined' || wallpapers.length === 0) {
+            console.log('App not loaded, trying emergency fetch...');
+            fetch('/api/wallpapers')
+                .then(r => r.json())
+                .then(data => {
+                    console.log('Emergency load:', data.length, 'wallpapers');
+                    if (data.length > 0) {
+                        // Simple render
+                        const grid = document.getElementById('galleryGrid');
+                        if (grid) {
+                            grid.innerHTML = '';
+                            data.forEach(w => {
+                                const div = document.createElement('div');
+                                div.style.cssText = 'margin:10px;border-radius:16px;overflow:hidden;cursor:pointer;';
+                                div.innerHTML = `
+                                    <img src="${w.thumbnail_url || w.image_url}" style="width:100%;height:250px;object-fit:cover;" 
+                                         onerror="this.src='${w.image_url}'">
+                                    <div style="padding:10px;background:var(--bg-card);">
+                                        <div style="font-weight:600;">${w.title}</div>
+                                        <div style="font-size:0.8rem;color:var(--text-muted);">${w.category}</div>
+                                    </div>
+                                `;
+                                div.onclick = () => window.open(w.image_url, '_blank');
+                                grid.appendChild(div);
+                            });
+                            
+                            // Update stats
+                            const statCount = document.getElementById('statCount');
+                            if (statCount) statCount.textContent = data.length;
+                            
+                            // Fix WOTD
+                            const wotdImg = document.getElementById('wotdImage');
+                            const wotdTitle = document.getElementById('wotdTitle');
+                            const wotdDesc = document.getElementById('wotdDesc');
+                            if (wotdImg && data[0]) {
+                                wotdImg.src = data[0].thumbnail_url || data[0].image_url;
+                                wotdImg.onerror = () => wotdImg.src = data[0].image_url;
+                            }
+                            if (wotdTitle && data[0]) wotdTitle.textContent = data[0].title;
+                            if (wotdDesc && data[0]) wotdDesc.textContent = data[0].category;
+                        }
+                    }
+                })
+                .catch(err => console.error('Emergency fetch failed:', err));
+        }
+    }, 5000); // Wait 5 seconds then check
+</script>
 <body>
     <div class="container">
         <a href="/" class="logo">
