@@ -685,20 +685,29 @@ function initModal() {
 
 // ==================== WALLPAPER OF THE DAY ====================
 
+// Wallpaper of the Day - with better error handling
 async function loadWallpaperOfTheDay() {
     try {
         const response = await fetch('/api/wallpapers?category=all');
-        const data = await response.json();
+        if (!response.ok) throw new Error('API failed');
         
-        if (!data.length) return;
+        const data = await response.json();
+        console.log('WOTD data:', data);
+        
+        if (!data || !data.length) {
+            console.log('No wallpapers for WOTD');
+            document.getElementById('wotdTitle').textContent = 'Coming Soon';
+            document.getElementById('wotdDesc').textContent = 'Wallpapers loading...';
+            return;
+        }
         
         const today = new Date();
         const dateStr = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
         const dateEl = document.getElementById('wotdDate');
         if (dateEl) dateEl.textContent = dateStr;
         
-        const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
-        const wotd = data[dayOfYear % data.length];
+        // Use first wallpaper if array has items
+        const wotd = data[0];
         
         const imgEl = document.getElementById('wotdImage');
         const titleEl = document.getElementById('wotdTitle');
@@ -706,9 +715,13 @@ async function loadWallpaperOfTheDay() {
         const cardEl = document.getElementById('wotdCard');
         const btnEl = document.getElementById('wotdBtn');
         
-        if (imgEl) imgEl.src = wotd.thumbnail_url || wotd.image_url;
-        if (titleEl) titleEl.textContent = wotd.title;
-        if (descEl) descEl.textContent = `Featured ${capitalize(wotd.category)} Wallpaper`;
+        if (imgEl) {
+            imgEl.src = wotd.thumbnail_url || wotd.image_url;
+            imgEl.onload = () => console.log('WOTD image loaded');
+            imgEl.onerror = () => console.log('WOTD image failed');
+        }
+        if (titleEl) titleEl.textContent = wotd.title || 'Featured Wallpaper';
+        if (descEl) descEl.textContent = `Featured ${capitalize(wotd.category || 'Wallpaper')}`;
         
         if (cardEl) {
             cardEl.addEventListener('click', () => openModal(wotd));
@@ -723,6 +736,38 @@ async function loadWallpaperOfTheDay() {
         
     } catch (e) {
         console.error('WOTD load error:', e);
+        document.getElementById('wotdTitle').textContent = 'Loading...';
+    }
+}
+
+// Fetch wallpapers with better error handling
+async function fetchWallpapers(category = 'all') {
+    showSkeletons(8);
+    const apiCategory = getApiCategory(category);
+    const url = apiCategory === 'all' ? '/api/wallpapers' : `/api/wallpapers?category=${apiCategory}`;
+    
+    console.log('Fetching:', url);
+    
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        wallpapers = await response.json();
+        console.log(`Loaded ${wallpapers.length} wallpapers for: ${apiCategory}`);
+        
+        if (!wallpapers.length) {
+            galleryGrid.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:3rem;">No wallpapers found. Try uploading some!</p>';
+            return;
+        }
+        
+        renderGallery(wallpapers);
+        updateGalleryTitle(category);
+        updateStatCount(wallpapers.length);
+    } catch (e) {
+        console.error('Fetch error:', e);
+        galleryGrid.innerHTML = `<p style="text-align:center;color:var(--text-secondary);padding:3rem;">Error loading wallpapers: ${e.message}</p>`;
     }
 }
 

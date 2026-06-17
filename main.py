@@ -257,6 +257,36 @@ def check_favorite(wallpaper_id: int, user_id: int = Query(...), db: Session = D
     ).first()
     return JSONResponse(content={"is_favorite": bool(exists)})
 
+@app.on_event("startup")
+def on_startup():
+    Base.metadata.create_all(bind=engine)
+    db = SessionLocal()
+    try:
+        count = db.query(Wallpaper).count()
+        
+        if count == 0:
+            # Seed with sample wallpapers if DB is empty
+            seed_wallpapers = [
+                Wallpaper(title="Neon Horizon", category="Sci-Fi", image_url="https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?w=1920&q=80", thumbnail_url=None, public_id=None),
+                Wallpaper(title="Abstract Flow", category="Abstract", image_url="https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=1920&q=80", thumbnail_url=None, public_id=None),
+                Wallpaper(title="Deep Space", category="AMOLED", image_url="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1920&q=80", thumbnail_url=None, public_id=None),
+                Wallpaper(title="Minimal White", category="Minimal", image_url="https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=1920&q=80", thumbnail_url=None, public_id=None),
+                Wallpaper(title="Forest Mist", category="Nature", image_url="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&q=80", thumbnail_url=None, public_id=None),
+                Wallpaper(title="Cyber Grid", category="Sci-Fi", image_url="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1920&q=80", thumbnail_url=None, public_id=None),
+                Wallpaper(title="Ocean Waves", category="Abstract", image_url="https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1920&q=80", thumbnail_url=None, public_id=None),
+                Wallpaper(title="Mountain Peak", category="Nature", image_url="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80", thumbnail_url=None, public_id=None),
+                Wallpaper(title="City Lights", category="Technology", image_url="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1920&q=80", thumbnail_url=None, public_id=None),
+                Wallpaper(title="Sports Car", category="Cars", image_url="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1920&q=80", thumbnail_url=None, public_id=None),
+            ]
+            for wallpaper in seed_wallpapers:
+                db.add(wallpaper)
+            db.commit()
+            print(f"Seeded {len(seed_wallpapers)} wallpapers")
+        else:
+            print(f"Database has {count} wallpapers. Skipping seed.")
+    finally:
+        db.close()
+
 # ==================== LEGAL PAGES ====================
 
 @app.get("/privacy")
