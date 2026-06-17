@@ -1,3 +1,13 @@
+// Add this FIRST LINE to app.js
+console.log('app.js loaded, lucide available:', typeof lucide);
+
+// If lucide fails, create a fallback
+if (typeof lucide === 'undefined') {
+    window.lucide = {
+        createIcons: function() { console.log('lucide fallback'); }
+    };
+}
+
 let wallpapers = [];
 let currentCategory = 'all';
 let currentWallpaper = null;
