@@ -24,48 +24,10 @@ def get_db():
 
 LOCAL_FOLDERS = ["abstract", "space", "surreal", "Minimalist", "cyberpunk", "nature", "technology", "sports", "music", "cars", "anime", "top-rated", "premium"]
 
-SEED_WALLPAPERS = [
-    {"title": "Neon Horizon", "category": "Sci-Fi", "image_url": "https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?w=1920&q=80"},
-    {"title": "Abstract Flow", "category": "Abstract", "image_url": "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=1920&q=80"},
-    {"title": "Deep Space", "category": "AMOLED", "image_url": "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1920&q=80"},
-    {"title": "Minimal White", "category": "Minimal", "image_url": "https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=1920&q=80"},
-    {"title": "Forest Mist", "category": "Nature", "image_url": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&q=80"},
-    {"title": "Cyber Grid", "category": "Sci-Fi", "image_url": "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1920&q=80"},
-    {"title": "Ocean Waves", "category": "Abstract", "image_url": "https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=1920&q=80"},
-    {"title": "Mountain Peak", "category": "Nature", "image_url": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1920&q=80"},
-    {"title": "City Lights", "category": "Technology", "image_url": "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1920&q=80"},
-    {"title": "Sports Car", "category": "Cars", "image_url": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1920&q=80"},
-]
-
 @app.on_event("startup")
 def on_startup():
     Base.metadata.create_all(bind=engine)
-    db = SessionLocal()
-    try:
-        count = db.query(Wallpaper).count()
-        
-        # If the database is empty, force the seed regardless of folders
-        if count == 0:
-            print("Database is empty. Seeding initial wallpapers...")
-            for data in SEED_WALLPAPERS:
-                wallpaper = Wallpaper(
-                    title=data["title"],
-                    category=data["category"],
-                    image_url=data["image_url"],
-                    thumbnail_url=data["image_url"],
-                    public_id=None
-                )
-                db.add(wallpaper)
-            db.commit()
-            print(f"Seeded {len(SEED_WALLPAPERS)} wallpapers successfully!")
-        else:
-            print(f"Database already has {count} wallpapers. Skipping seed.")
-            
-    except Exception as e:
-        print(f"Startup error: {e}")
-        db.rollback()
-    finally:
-        db.close()
+    print("Application started. Connected to PostgreSQL database successfully.")
 
 # Read HTML template at request time (not import time) to avoid caching issues
 def read_html_template():
