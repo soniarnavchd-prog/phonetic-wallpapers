@@ -43,25 +43,24 @@ def on_startup():
     db = SessionLocal()
     try:
         count = db.query(Wallpaper).count()
-        has_local_folders = any(os.path.exists(f) for f in LOCAL_FOLDERS)
-
+        
+        # If the database is empty, force the seed regardless of folders
         if count == 0:
-            if not has_local_folders:
-                for data in SEED_WALLPAPERS:
-                    wallpaper = Wallpaper(
-                        title=data["title"],
-                        category=data["category"],
-                        image_url=data["image_url"],
-                        thumbnail_url=data["image_url"],
-                        public_id=None
-                    )
-                    db.add(wallpaper)
-                db.commit()
-                print(f"Seeded {len(SEED_WALLPAPERS)} wallpapers")
-            else:
-                print("Local folders detected. Run: python upload_local.py")
+            print("Database is empty. Seeding initial wallpapers...")
+            for data in SEED_WALLPAPERS:
+                wallpaper = Wallpaper(
+                    title=data["title"],
+                    category=data["category"],
+                    image_url=data["image_url"],
+                    thumbnail_url=data["image_url"],
+                    public_id=None
+                )
+                db.add(wallpaper)
+            db.commit()
+            print(f"Seeded {len(SEED_WALLPAPERS)} wallpapers successfully!")
         else:
-            print(f"Database has {count} wallpapers. Skipping seed.")
+            print(f"Database already has {count} wallpapers. Skipping seed.")
+            
     except Exception as e:
         print(f"Startup error: {e}")
         db.rollback()
