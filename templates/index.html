@@ -1,143 +1,103 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phonetic - Premium Wallpapers</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Phonetic — Phone & Aesthetic Wallpapers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-<base target="_blank">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
+
 <body>
-    <!-- Mobile Menu Overlay -->
-    <div id="mobileMenuOverlay" class="mobile-menu-overlay">
-        <div class="mobile-menu-backdrop"></div>
-        <div class="mobile-menu-panel">
-            <div class="mobile-menu-header">
-                <span class="mobile-menu-title">Menu</span>
-                <button id="mobileMenuClose" class="mobile-menu-close" aria-label="Close menu">
-                    <svg data-lucide="x" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-                </button>
-            </div>
-            <div class="mobile-menu-links">
-                <a href="#" class="mobile-menu-link" data-nav="home">
-                    <span class="mobile-menu-icon">🏠</span> Home
-                </a>
-                <a href="#" class="mobile-menu-link" data-nav="top-rated">
-                    <span class="mobile-menu-icon">🔥</span> Top Rated
-                </a>
-                <a href="#" class="mobile-menu-link" data-nav="premium">
-                    <span class="mobile-menu-icon">💎</span> Premium
-                </a>
-                <a href="#" class="mobile-menu-link" data-nav="cars">
-                    <span class="mobile-menu-icon">🏎️</span> Cars
-                </a>
-                <a href="#" class="mobile-menu-link" data-nav="anime">
-                    <span class="mobile-menu-icon">🎌</span> Anime
-                </a>
-            </div>
-            <div class="mobile-menu-divider"></div>
-            <div class="mobile-menu-categories">
-                <p class="mobile-menu-section">Categories</p>
-                <a href="#" class="mobile-menu-link" data-category="abstract">Abstract</a>
-                <a href="#" class="mobile-menu-link" data-category="amoled">AMOLED</a>
-                <a href="#" class="mobile-menu-link" data-category="minimal">Minimal</a>
-                <a href="#" class="mobile-menu-link" data-category="scifi">Sci-Fi</a>
-                <a href="#" class="mobile-menu-link" data-category="nature">Nature</a>
-                <a href="#" class="mobile-menu-link" data-category="technology">Technology</a>
-                <a href="#" class="mobile-menu-link" data-category="sports">Sports</a>
-                <a href="#" class="mobile-menu-link" data-category="music">Music</a>
-                <a href="#" class="mobile-menu-link" data-category="cars">Cars</a>
-                <a href="#" class="mobile-menu-link" data-category="anime">Anime</a>
-                <a href="#" class="mobile-menu-link" data-category="space">Space</a>
-                <a href="#" class="mobile-menu-link" data-category="surreal">Surreal</a>
-                <a href="#" class="mobile-menu-link" data-category="cyberpunk">Cyberpunk</a>
-            </div>
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">
+            <div class="loading-logo-text">Phonetic</div>
         </div>
-    </div>
-    <div class="ambient-light"></div>
-
-    <!-- Loading Screen -->
-    <div id="loadingScreen" class="loading-screen">
-        <div class="loading-content">
-            <div class="loading-logo">
-                <div class="loading-logo-animated">
-                    <span class="loading-char">P</span><span class="loading-char">h</span><span class="loading-char">o</span><span class="loading-char">n</span><span class="loading-char">e</span><span class="loading-char">t</span><span class="loading-char">i</span><span class="loading-char">c</span>
-                </div>
-            </div>
-            <div class="loading-bar">
-                <div class="loading-progress"></div>
-            </div>
-            <p class="loading-text">Loading wallpapers...</p>
+        <div class="loading-text">Preparing Quality Wallpapers</div>
+        <div class="loading-bar">
+            <div class="loading-bar-fill"></div>
         </div>
     </div>
 
-    <!-- Navbar -->
+    <div id="downloadAdOverlay" class="download-ad-overlay">
+        <div class="download-ad-card">
+            <h3 id="downloadStatusText" class="download-status">Please wait, downloading your wallpaper for free...</h3>
+
+            <div class="ad-placeholder">
+                <i data-lucide="monitor-play" style="width: 32px; height: 32px; color: var(--accent);"></i>
+                <span>Support this website</span>
+                <span style="font-size: 0.7rem;">(Ad block placement)</span>
+            </div>
+
+            <div id="downloadTimerText" class="download-timer">5</div>
+            <div id="downloadTick" class="tick-animation">
+                <i data-lucide="check-circle-2"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="hello-screen" id="helloScreen">
+        <div class="hello-text">Phonetic</div>
+        <div class="hello-tagline">Phone & Aesthetic</div>
+    </div>
+
     <nav class="navbar">
         <div class="nav-container">
-            <a href="/" class="logo">
-                <div class="logo-animated">
-                    <span class="logo-char">P</span><span class="logo-char">h</span><span class="logo-char">o</span><span class="logo-char">n</span><span class="logo-char">e</span><span class="logo-char">t</span><span class="logo-char">i</span><span class="logo-char">c</span>
-                </div>
+            <a href="#" class="logo">
+                <img src="/static/logo.jpeg" alt="Phonetic" class="logo-icon">
                 <div class="logo-text-wrap">
-                    <span class="logo-tagline">WALLPAPERS</span>
+                    <span class="logo-text">Phonetic</span>
+                    <span class="logo-tagline">Phone & Aesthetic</span>
                 </div>
             </a>
 
             <div class="nav-links">
-                <a href="#" class="nav-link active" data-nav="home">
-                    <span class="nav-emoji">🏠</span> Home
-                </a>
+                <a href="#" class="nav-link active" data-nav="home">Home</a>
                 <a href="#" class="nav-link" data-nav="top-rated">
-                    <span class="nav-emoji">🔥</span> Top Rated
+                    <span class="nav-emoji">⭐</span> Top Rated
                 </a>
                 <a href="#" class="nav-link" data-nav="premium">
-                    <span class="nav-emoji diamond">💎</span> Premium
+                    <span class="nav-emoji diamond">💎</span>
+                    <span class="premium-text">Premium</span>
                 </a>
                 <a href="#" class="nav-link" data-nav="cars">
                     <span class="nav-emoji car">🏎️</span> Cars
                 </a>
                 <a href="#" class="nav-link" data-nav="anime">
-                    <span class="nav-emoji">🎌</span> Anime
+                    <span class="nav-emoji">👾</span> Anime
                 </a>
             </div>
 
-            <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Menu">
-                <svg data-lucide="menu" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-            </button>
             <div class="nav-actions">
                 <div class="search-box">
-                    <svg class="search-icon" data-lucide="search" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-                    <input type="text" id="searchInput" placeholder="Search wallpapers...">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Search categories...">
                 </div>
-                <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
-                    <svg class="theme-icon sun" data-lucide="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
-                    <svg class="theme-icon moon" data-lucide="moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                <button class="account-btn" id="accountBtn" title="My Account">
+                    <i data-lucide="user"></i>
                 </button>
-                <button id="accountBtn" class="account-btn" aria-label="Account">
-                    <svg data-lucide="user" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                <div class="user-avatar" id="userAvatar" style="display:none;">?</div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <svg class="theme-icon sun" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5" /><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" /></svg>
+                    <svg class="theme-icon moon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></svg>
                 </button>
-                <div id="userAvatar" class="user-avatar" style="display:none;"></div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero -->
-    <section class="hero">
+    <header class="hero">
         <div class="hero-content">
             <div class="hero-badge">
                 <span class="badge-dot"></span>
-                <span>Live Wallpaper Gallery</span>
+                <span>4K Ultra HD Collection</span>
             </div>
             <h1 class="hero-title">
-                <span class="title-line">Curated</span>
+                <span class="title-line">Discover Stunning</span>
                 <span class="title-line gradient-text">Wallpapers</span>
             </h1>
-            <p class="hero-subtitle">Discover stunning 4K wallpapers for desktop and phone. Hand-picked, optimized, and ready to download.</p>
-
+            <p class="hero-subtitle">Curated 4K, AMOLED, and minimalist wallpapers for every screen</p>
             <div class="hero-stats">
                 <div class="stat">
                     <span class="stat-number" id="statCount">0</span>
@@ -145,40 +105,51 @@
                 </div>
                 <div class="stat-divider"></div>
                 <div class="stat">
-                    <span class="stat-number">14</span>
+                    <span class="stat-number" id="statCategories">14</span>
                     <span class="stat-label">Categories</span>
                 </div>
                 <div class="stat-divider"></div>
                 <div class="stat">
                     <span class="stat-number">4K</span>
-                    <span class="stat-label">Quality</span>
+                    <span class="stat-label">Resolution</span>
+                </div>
+            </div>
+
+            <div class="wotd-section" id="wotdSection">
+                <div class="wotd-label">
+                    <span class="wotd-badge">✨ Wallpaper of the Day</span>
+                    <span class="wotd-date" id="wotdDate">Loading...</span>
+                </div>
+                <div class="wotd-card" id="wotdCard">
+                    <img src="" alt="Wallpaper of the Day" class="wotd-image" id="wotdImage">
+                    <div class="wotd-overlay">
+                        <h3 class="wotd-title" id="wotdTitle">Loading...</h3>
+                        <p class="wotd-desc" id="wotdDesc">Today's featured wallpaper</p>
+                        <button class="wotd-btn" id="wotdBtn">
+                            <i data-lucide="download"></i>
+                            <span>Download Now</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="hero-scroll">
-            <div class="scroll-mouse">
-                <div class="scroll-wheel"></div>
-            </div>
-        </div>
-    </section>
+    </header>
 
-    <!-- Device Toggle -->
-    <div class="device-toggle-section">
-        <div class="device-toggle-container">
-            <button id="btnDesktop" class="device-type-btn active" data-type="desktop">
-                <svg data-lucide="monitor" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+    <section class="device-toggle-section">
+        <div class="device-toggle">
+            <button class="device-toggle-btn active" data-device-type="desktop" id="btnDesktop">
+                <i data-lucide="monitor"></i>
                 <span>Desktop</span>
             </button>
-            <button id="btnPhone" class="device-type-btn" data-type="phone">
-                <svg data-lucide="smartphone" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+            <button class="device-toggle-btn" data-device-type="phone" id="btnPhone">
+                <i data-lucide="smartphone"></i>
                 <span>Phone</span>
             </button>
         </div>
-    </div>
+    </section>
 
-    <!-- Categories -->
     <section class="categories-section">
-        <div class="categories-container">
+        <div class="categories-container" id="categoriesContainer">
             <button class="category-pill active" data-category="all">All</button>
             <button class="category-pill" data-category="abstract">Abstract</button>
             <button class="category-pill" data-category="amoled">AMOLED</button>
@@ -192,300 +163,180 @@
             <button class="category-pill" data-category="anime">Anime</button>
             <button class="category-pill" data-category="space">Space</button>
             <button class="category-pill" data-category="surreal">Surreal</button>
-            <button class="category-pill" data-category="cyberpunk">Cyberpunk</button>
             <button class="category-pill" data-category="top-rated">Top Rated</button>
             <button class="category-pill" data-category="premium">Premium</button>
         </div>
     </section>
 
-    <!-- Wallpaper of the Day -->
-    <section class="wotd-section">
-        <div class="wotd-container">
-            <div class="wotd-header">
-                <span class="wotd-badge">★ Wallpaper of the Day</span>
-                <span class="wotd-date" id="wotdDate"></span>
-            </div>
-            <div id="wotdCard" class="wotd-card">
-                <img id="wotdImage" src="" alt="Wallpaper of the Day" class="wotd-image">
-                <div class="wotd-overlay">
-                    <div class="wotd-info">
-                        <h3 id="wotdTitle" class="wotd-title">Loading...</h3>
-                        <p id="wotdDesc" class="wotd-desc">Featured Wallpaper</p>
-                    </div>
-                    <button id="wotdBtn" class="wotd-btn">
-                        <svg data-lucide="download" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-                        Download
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Gallery -->
-    <section class="gallery-section">
+    <main class="gallery-section">
         <div class="gallery-header">
             <h2 class="gallery-title" id="galleryTitle">All Wallpapers</h2>
         </div>
-        <div id="galleryGrid" class="gallery-grid"></div>
-    </section>
+        <div class="gallery-grid" id="galleryGrid"></div>
+    </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-logo">
-                <span class="footer-logo-text">Phonetic</span>
-            </div>
-            <div class="footer-links">
-                <a href="/privacy">Privacy</a>
-                <a href="/terms">Terms</a>
-                <a href="/contact">Contact</a>
-            </div>
-            <p class="footer-copy">&copy; 2026 Phonetic Wallpapers. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <!-- Wallpaper Modal -->
-    <div id="modalOverlay" class="modal-overlay">
+    <div class="modal-overlay" id="modalOverlay">
         <div class="modal-backdrop"></div>
         <div class="modal-container">
-            <button id="modalClose" class="modal-close" aria-label="Close modal">
-                <svg data-lucide="x" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-            </button>
+            <button class="modal-close" id="modalClose">✕</button>
             <div class="modal-content">
-                <div class="device-selector">
-                    <button class="device-btn active" data-device="desktop">
-                        <svg data-lucide="monitor" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
-                        <span>Desktop</span>
-                    </button>
-                    <button class="device-btn" data-device="phone">
-                        <svg data-lucide="smartphone" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
-                        <span>Phone</span>
-                    </button>
-                    <button class="device-btn" data-device="tablet">
-                        <svg data-lucide="tablet" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><line x1="12" x2="12.01" y1="18" y2="18"/></svg>
-                        <span>Tablet</span>
-                    </button>
-                </div>
-
-                <div id="previewFrame" class="preview-frame" data-device="desktop">
-                    <div id="previewLoading" class="preview-loading">
+                <div class="preview-frame" id="previewFrame" data-device="desktop">
+                    <img src="" alt="Preview" class="preview-image" id="previewImage">
+                    <div class="preview-loading" id="previewLoading">
                         <div class="loading-spinner"></div>
                     </div>
-                    <img id="previewImage" class="preview-image" src="" alt="">
 
-                    <div id="phoneUiMock" class="ui-mock phone-ui-mock">
-                        <div class="phone-notch"></div>
-                        <div class="phone-status-bar">
-                            <span id="phoneTime">9:41</span>
-                            <div class="phone-status-icons">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2 22h20V2z"/></svg>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-5 0-9 4-9 9 0 5 4 9 9 9s9-4 9-9c0-5-4-9-9-9zm0 16c-3.9 0-7-3.1-7-7s3.1-7 7-7 7 3.1 7 7-3.1 7-7 7z"/><path d="M12 7v5l4 2"/></svg>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
-                            </div>
-                        </div>
-                        <div class="phone-apps-grid">
-                            <div class="phone-app-icon" style="background: linear-gradient(135deg, #34c759, #30d158);"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-2.2 2.2a15.057 15.057 0 01-6.59-6.59l2.2-2.21c.28-.26.36-.65.25-1.01A11.36 11.36 0 018.59 4.99c0-.55-.45-1-1-1H4.08c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z"/></svg><span>Phone</span></div>
-                            <div class="phone-app-icon" style="background: linear-gradient(135deg, #007aff, #5ac8fa);"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg><span>Mail</span></div>
-                            <div class="phone-app-icon" style="background: linear-gradient(135deg, #ff3b30, #ff9500);"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span>Maps</span></div>
-                            <div class="phone-app-icon" style="background: linear-gradient(135deg, #af52de, #5856d6);"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg><span>Music</span></div>
-                            <div class="phone-app-icon" style="background: linear-gradient(135deg, #ff9500, #ffcc00);"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg><span>Notes</span></div>
-                            <div class="phone-app-icon" style="background: linear-gradient(135deg, #ff2d55, #ff3b30);"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><span>Health</span></div>
-                            <div class="phone-app-icon" style="background: linear-gradient(135deg, #5ac8fa, #34c759);"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg><span>Clock</span></div>
-                            <div class="phone-app-icon" style="background: linear-gradient(135deg, #5856d6, #007aff);"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg><span>Browser</span></div>
-                        </div>
-                        <div class="phone-dock">
-                            <div class="phone-dock-app" style="background: linear-gradient(135deg, #34c759, #30b350);"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></div>
-                            <div class="phone-dock-app" style="background: linear-gradient(135deg, #007aff, #5ac8fa);"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
-                            <div class="phone-dock-app" style="background: linear-gradient(135deg, #ff3b30, #ff9500);"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg></div>
-                            <div class="phone-dock-app" style="background: linear-gradient(135deg, #af52de, #5856d6);"><svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg></div>
-                        </div>
-                        <div class="phone-home-bar"></div>
-                    </div>
-
-                    <div id="desktopUiMock" class="ui-mock desktop-ui-mock">
-                        <div class="desktop-desktop-icons">
-                            <div class="desktop-icon">
-                                <div class="desktop-icon-img" style="background: linear-gradient(135deg, #FFD700, #FFA500);"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg></div>
-                                <span>This PC</span>
-                            </div>
-                            <div class="desktop-icon">
-                                <div class="desktop-icon-img" style="background: linear-gradient(135deg, #0078D4, #5EB8F7);"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg></div>
-                                <span>Recycle Bin</span>
-                            </div>
-                            <div class="desktop-icon">
-                                <div class="desktop-icon-img" style="background: linear-gradient(135deg, #107C10, #4CAF50);"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
-                                <span>Documents</span>
-                            </div>
-                            <div class="desktop-icon">
-                                <div class="desktop-icon-img" style="background: linear-gradient(135deg, #D83B01, #FF8C69);"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
-                                <span>Edge</span>
-                            </div>
-                        </div>
-                        <div class="desktop-taskbar">
-                            <div class="taskbar-start-btn">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M3 3h8v8H3zm10 0h8v4h-8zm0 6h8v10h-8zM3 13h8v8H3z"/></svg>
-                            </div>
-                            <div class="taskbar-search">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                                <span>Search</span>
-                            </div>
-                            <div class="taskbar-apps">
-                                <div class="taskbar-app-icon" style="background: #0078D4;"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg></div>
-                                <div class="taskbar-app-icon" style="background: #D83B01;"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg></div>
-                                <div class="taskbar-app-icon" style="background: #107C10;"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></div>
-                                <div class="taskbar-app-icon" style="background: #FFB900;"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
-                                <div class="taskbar-app-icon" style="background: #5C2D91;"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
-                            </div>
-                            <div class="taskbar-tray">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3a4.237 4.237 0 00-6 0zm-4-4l2 2a7.074 7.074 0 0110 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M12 3c-4.8 0-9 3.86-9 9 0 2.12.74 4.07 1.97 5.61L3 21l3.39-1.97A8.93 8.93 0 0012 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-1.86 0-3.63-.5-5.17-1.45l-.37-.22-2.02 1.17.56-2.02-.22-.37A7.93 7.93 0 014 12c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7z"/></svg>
-                                <span id="desktopTime">9:41 AM</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal-info">
-                    <h2 id="modalTitle" class="modal-title">Wallpaper Title</h2>
-                    <div class="modal-meta">
-                        <span id="modalResolution">3840 &times; 2160</span>
-                        <span class="modal-divider">&bull;</span>
-                        <span id="modalCategory" class="modal-category">Category</span>
-                    </div>
-                </div>
-
-                <div class="modal-actions-row">
-                    <button id="uiPreviewToggle" class="btn-secondary">
-                        <svg data-lucide="eye" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                    <button class="ui-preview-toggle" id="uiPreviewToggle">
+                        <i data-lucide="smartphone"></i>
                         <span>Preview UI</span>
                     </button>
-                    <button id="btnDownload" class="btn-download">
-                        <svg data-lucide="download" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-                        Download Wallpaper
+
+                    <div class="phone-ui-mock" id="phoneUiMock">
+                        <div class="phone-status-bar">
+                            <span class="phone-time" id="phoneTime">9:41</span>
+                            <span>5G 🔋</span>
+                        </div>
+                        <div class="phone-apps">
+                            <div class="phone-app-icon">📱</div><div class="phone-app-icon">📷</div>
+                            <div class="phone-app-icon">🎵</div><div class="phone-app-icon">✉️</div>
+                            <div class="phone-app-icon">🌐</div><div class="phone-app-icon">⚙️</div>
+                            <div class="phone-app-icon">🗺️</div><div class="phone-app-icon">🛒</div>
+                        </div>
+                        <div class="phone-dock">
+                            <div class="phone-app-icon">📞</div><div class="phone-app-icon">💬</div>
+                            <div class="phone-app-icon">🎵</div><div class="phone-app-icon">📧</div>
+                        </div>
+                    </div>
+
+                    <div class="desktop-ui-mock" id="desktopUiMock">
+                        <div class="desktop-taskbar">
+                            <div class="desktop-taskbar-left">
+                                <span>Start</span>
+                                <div class="desktop-taskbar-icon">🔍</div>
+                            </div>
+                            <div class="desktop-taskbar-center">
+                                <div class="desktop-taskbar-icon">📁</div>
+                                <div class="desktop-taskbar-icon">🌐</div>
+                                <div class="desktop-taskbar-icon">💬</div>
+                            </div>
+                            <div class="desktop-taskbar-left">
+                                <span id="desktopTime">9:41 AM</span>
+                                <span>🔊 📶 🔋</span>
+                            </div>
+                        </div>
+                        <div class="desktop-icons">
+                            <div class="desktop-icon">
+                                <div class="desktop-icon-img">🗑️</div><span>Recycle</span>
+                            </div>
+                            <div class="desktop-icon">
+                                <div class="desktop-icon-img">📁</div><span>Files</span>
+                            </div>
+                            <div class="desktop-icon">
+                                <div class="desktop-icon-img">🌐</div><span>Browser</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-info">
+                    <h2 class="modal-title" id="modalTitle">Wallpaper</h2>
+                    <div class="modal-meta">
+                        <span class="modal-resolution" id="modalResolution">3840 × 2160</span>
+                        <span class="modal-divider">•</span>
+                        <span class="modal-category" id="modalCategory">Category</span>
+                    </div>
+                </div>
+                <div class="device-selector">
+                    <button class="device-btn active" data-device="desktop">
+                        <i data-lucide="monitor"></i><span>Desktop</span>
+                    </button>
+                    <button class="device-btn" data-device="phone">
+                        <i data-lucide="smartphone"></i><span>Phone</span>
+                    </button>
+                    <button class="device-btn" data-device="tablet">
+                        <i data-lucide="tablet"></i><span>Tablet</span>
+                    </button>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-download" id="btnDownload">
+                        <i data-lucide="download"></i><span>Download</span>
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Download Ad Modal -->
-    <div id="downloadModal" class="download-modal">
-        <div class="download-modal-backdrop"></div>
-        <div class="download-modal-content">
-            <button id="downloadModalClose" class="download-modal-close" aria-label="Close download modal">
-                <svg data-lucide="x" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-            </button>
-            <div id="downloadPhase1" class="download-phase">
-                <div class="download-header">
-                    <h3>Please wait</h3>
-                    <p>Downloading your wallpaper for free</p>
-                </div>
-
-                <div class="ad-block">
-                    <div class="ad-placeholder">
-                        <div class="ad-icon">&#128640;</div>
-                        <h4>Support Phonetic</h4>
-                        <p>Help us keep the lights on and the wallpapers flowing. Premium ad-free downloads coming soon!</p>
-                        <div class="ad-badge">Advertisement</div>
-                    </div>
-                </div>
-
-                <div class="countdown-block">
-                    <div class="countdown-ring">
-                        <svg viewBox="0 0 36 36">
-                            <path class="countdown-ring-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                            <path id="countdownRing" class="countdown-ring-progress" stroke-dasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                        </svg>
-                        <div class="countdown-number" id="countdownNumber">5</div>
-                    </div>
-                    <p class="countdown-label">Preparing your download...</p>
-                </div>
-            </div>
-
-            <div id="downloadPhase2" class="download-phase hidden">
-                <div class="success-animation">
-                    <svg class="checkmark" viewBox="0 0 52 52">
-                        <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
-                        <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-                    </svg>
-                </div>
-                <h3 class="success-title">Downloaded Successfully!</h3>
-                <p class="success-desc">Your wallpaper is being saved to your device.</p>
-            </div>
-        </div>
+    <div class="toast" id="toast">
+        <i data-lucide="check-circle"></i>
+        <span id="toastMessage">Download started</span>
     </div>
 
-    <!-- User Panel -->
-    <div id="userPanelOverlay" class="user-panel-overlay"></div>
-    <div id="userPanel" class="user-panel">
+    <div class="user-panel-overlay" id="userPanelOverlay"></div>
+
+    <div class="user-panel" id="userPanel">
         <div class="user-panel-header">
-            <h3>Account</h3>
-            <button id="userPanelClose" class="user-panel-close" aria-label="Close panel">
-                <svg data-lucide="x" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-            </button>
+            <h3 class="user-panel-title">My Collection</h3>
+            <button class="user-panel-close" id="userPanelClose">✕</button>
         </div>
-        <div class="user-panel-body">
-            <div id="userLoginSection" class="user-login-section">
-                <p class="user-login-text">Enter a username to save your favorites</p>
-                <input type="text" id="usernameInput" placeholder="Username" maxlength="20">
-                <button id="userLoginBtn" class="btn-primary">Get Started</button>
+
+        <div class="user-login" id="userLoginSection">
+            <input type="text" id="usernameInput" placeholder="Enter username to start...">
+            <button class="user-login-btn" id="userLoginBtn">Start Collecting</button>
+        </div>
+
+        <div id="userCollections" style="display:none;">
+            <div class="collection-input">
+                <input type="text" id="newCollectionInput" placeholder="New collection name...">
+                <button id="createCollectionBtn">Create</button>
             </div>
-            <div id="userCollections" class="user-collections" style="display:none;">
-                <div class="user-info-display">
-                    <div class="user-avatar-large" id="userAvatarLarge"></div>
-                    <div class="user-name-display" id="userNameDisplay"></div>
+            <div id="collectionsList">
                 </div>
-                <div class="collections-header">
-                    <h4>My Collections</h4>
-                    <div class="new-collection">
-                        <input type="text" id="newCollectionInput" placeholder="New collection name" maxlength="30">
-                        <button id="createCollectionBtn" class="btn-icon" aria-label="Create collection">
-                            <svg data-lucide="plus" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-                        </button>
-                    </div>
-                </div>
-                <div id="collectionsList" class="collections-list"></div>
-                <div class="user-actions">
-                    <button id="createNewAccountBtn" class="btn-secondary btn-full">
-                        <svg data-lucide="user-plus" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" x2="20" y1="8" y2="14"/><line x1="23" x2="17" y1="11" y2="11"/></svg>
-                        Create New Account
-                    </button>
-                    <button id="logoutBtn" class="btn-secondary btn-full btn-danger">
-                        <svg data-lucide="log-out" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></svg>
-                        Log Out
-                    </button>
-                </div>
-            </div>
         </div>
     </div>
 
-    <!-- Context Menu -->
-    <div id="customContextMenu" class="context-menu">
-        <div class="context-menu-item" id="ctxSaveImage">
-            <svg data-lucide="image" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-            <span>Save Image</span>
-        </div>
-        <div class="context-menu-item" id="ctxDownloadImage">
-            <svg data-lucide="download" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
-            <span>Download Image</span>
-        </div>
-        <div class="context-menu-item" id="ctxOpenNewTab">
-            <svg data-lucide="external-link" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg>
-            <span>Open in New Tab</span>
-        </div>
-        <div class="context-menu-divider"></div>
-        <div class="context-menu-item premium" id="ctxPremiumDownload">
-            <svg data-lucide="crown" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"/></svg>
-            <span>HD Download (Watch Ad)</span>
-        </div>
+    <div class="custom-context-menu" id="customContextMenu" style="display:none; position:fixed; background:var(--bg-card); border:1px solid var(--border); border-radius:12px; z-index:9999; flex-direction:column; padding:0.5rem; box-shadow:var(--shadow-lg);">
+        <button id="ctxSaveImage" style="background:none; border:none; color:var(--text-primary); text-align:left; padding:0.75rem 1rem; cursor:pointer; width:100%; border-radius:8px; display:flex; gap:0.5rem; align-items:center;">
+            <i data-lucide="save" style="width:16px;height:16px;"></i> Save Image
+        </button>
+        <button id="ctxDownloadImage" style="background:none; border:none; color:var(--text-primary); text-align:left; padding:0.75rem 1rem; cursor:pointer; width:100%; border-radius:8px; display:flex; gap:0.5rem; align-items:center;">
+            <i data-lucide="download" style="width:16px;height:16px;"></i> Free Download
+        </button>
+        <button id="ctxOpenNewTab" style="background:none; border:none; color:var(--text-primary); text-align:left; padding:0.75rem 1rem; cursor:pointer; width:100%; border-radius:8px; display:flex; gap:0.5rem; align-items:center;">
+            <i data-lucide="external-link" style="width:16px;height:16px;"></i> Open in New Tab
+        </button>
+        <div style="height:1px; background:var(--border); margin:0.5rem 0;"></div>
+        <button id="ctxPremiumDownload" style="background:none; border:none; color:var(--accent); text-align:left; padding:0.75rem 1rem; cursor:pointer; width:100%; border-radius:8px; display:flex; gap:0.5rem; align-items:center; font-weight:600;">
+            <i data-lucide="crown" style="width:16px;height:16px;"></i> Premium Download
+        </button>
     </div>
 
-    <!-- Toast -->
-    <div id="toast" class="toast">
-        <svg data-lucide="check-circle" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        <span id="toastMessage">Action completed</span>
+    <div class="mobile-bottom-nav" id="mobileBottomNav">
+        <a href="#" class="mob-nav-item active" data-nav="home">
+            <i data-lucide="home"></i>
+            <span>Home</span>
+        </a>
+        <a href="#" class="mob-nav-item" data-nav="top-rated">
+            <i data-lucide="star"></i>
+            <span>Trending</span>
+        </a>
+        <a href="#" class="mob-nav-item" id="mobThemeToggle">
+            <i data-lucide="sun-moon"></i>
+            <span>Theme</span>
+        </a>
+        <a href="#" class="mob-nav-item" id="mobAccountBtn">
+            <i data-lucide="user"></i>
+            <span>Profile</span>
+        </a>
     </div>
 
-    <script src="/static/js/app.js"></script>
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms of Service</a>
+            <a href="/contact">Contact</a>
+        </div>
+        <p class="footer-copy">© 2026 Phonetic Wallpapers. All rights reserved.</p>
+    </footer>
+
+    <script src="/static/app.js"></script>
 </body>
 </html>
