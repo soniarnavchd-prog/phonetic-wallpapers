@@ -13,29 +13,29 @@ let currentUser = null;
 let uiPreviewActive = false;
 let contextMenuTarget = null;
 
-// Initialize the DOM container object if not already defined globally
+// DOM element cache
 const DOM = {};
 
-function cacheDOM() { 
-  const ids = [ 
-    'galleryGrid', 'themeToggle', 'modalOverlay', 'modalClose', 'previewFrame', 
-    'previewImage', 'previewLoading', 'modalTitle', 'modalResolution', 'modalCategory', 
-    'btnDownload', 'toast', 'toastMessage', 'searchInput', 'galleryTitle', 
-    'loadingScreen', 'btnDesktop', 'btnPhone', 'uiPreviewToggle', 'phoneUiMock', 
-    'desktopUiMock', 'accountBtn', 'userAvatar', 'userPanel', 'userPanelOverlay', 
-    'userPanelClose', 'userLoginSection', 'usernameInput', 'userLoginBtn', 'userCollections', 
-    'collectionsList', 'newCollectionInput', 'createCollectionBtn', 'customContextMenu', 
-    'ctxSaveImage', 'ctxDownloadImage', 'ctxOpenNewTab', 'ctxPremiumDownload', 'downloadModal', 
-    'downloadPhase1', 'downloadPhase2', 'countdownNumber', 'countdownRing', 'downloadModalClose', 
-    'wotdImage', 'wotdTitle', 'wotdDesc', 'wotdDate', 'wotdCard', 'wotdBtn', 
-    'statCount', 'userAvatarLarge', 'userNameDisplay', 'createNewAccountBtn', 'logoutBtn' 
-  ]; 
-
-  ids.forEach(id => { 
-    DOM[id] = document.getElementById(id); 
-  }); 
+function cacheDOM() {
+    const ids = [
+        'galleryGrid', 'themeToggle', 'modalOverlay', 'modalClose',
+        'previewFrame', 'previewImage', 'previewLoading', 'modalTitle',
+        'modalResolution', 'modalCategory', 'btnDownload', 'toast',
+        'toastMessage', 'searchInput', 'galleryTitle', 'loadingScreen',
+        'btnDesktop', 'btnPhone', 'uiPreviewToggle', 'phoneUiMock',
+        'desktopUiMock', 'accountBtn', 'userAvatar', 'userPanel',
+        'userPanelOverlay', 'userPanelClose', 'userLoginSection',
+        'usernameInput', 'userLoginBtn', 'userCollections', 'collectionsList',
+        'newCollectionInput', 'createCollectionBtn', 'customContextMenu',
+        'ctxSaveImage', 'ctxDownloadImage', 'ctxOpenNewTab', 'ctxPremiumDownload',
+        'downloadModal', 'downloadPhase1', 'downloadPhase2', 'countdownNumber',
+        'countdownRing', 'downloadModalClose', 'wotdImage', 'wotdTitle', 'wotdDesc', 'wotdDate',
+        'wotdCard', 'wotdBtn', 'statCount', 'userAvatarLarge', 'userNameDisplay',
+        'createNewAccountBtn', 'logoutBtn',
+        'mobileMenuBtn', 'mobileMenuOverlay', 'mobileMenuClose'
+    ];
+    ids.forEach(id => { DOM[id] = document.getElementById(id); });
 }
-
 
 const CATEGORY_NAMES = {
     'all': 'All Wallpapers', 'abstract': 'Abstract', 'amoled': 'AMOLED',
@@ -92,6 +92,33 @@ function showSkeletons(count = 8) {
 // ==================== API FETCH ====================
 function getApiCategory(category) {
     return currentDeviceType === 'phone' ? (PHONE_CATEGORIES[category] || category) : category;
+}
+
+// Touch swipe support for categories
+function initCategorySwipe() {
+    const container = document.querySelector('.categories-container');
+    if (!container) return;
+
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+
+    container.addEventListener('touchstart', (e) => {
+        isDown = true;
+        startX = e.touches[0].pageX - container.offsetLeft;
+        scrollLeft = container.scrollLeft;
+    }, { passive: true });
+
+    container.addEventListener('touchend', () => {
+        isDown = false;
+    }, { passive: true });
+
+    container.addEventListener('touchmove', (e) => {
+        if (!isDown) return;
+        const x = e.touches[0].pageX - container.offsetLeft;
+        const walk = (x - startX) * 1.5;
+        container.scrollLeft = scrollLeft - walk;
+    }, { passive: true });
 }
 
 async function fetchWallpapers(category = 'all') {
@@ -240,6 +267,84 @@ function hideContextMenu() {
     if (DOM.customContextMenu) DOM.customContextMenu.classList.remove('active');
     contextMenuTarget = null;
 }
+function initMobileMenu() {
+    if (!DOM.mobileMenuBtn || !DOM.mobileMenuOverlay || !DOM.mobileMenuClose) return;
+
+    DOM.mobileMenuBtn.addEventListener('click', openMobileMenu);
+    DOM.mobileMenuClose.addEventListener('click', closeMobileMenu);
+    DOM.mobileMenuOverlay.addEventListener('click', (e) => {
+        if (e.target === DOM.mobileMenuOverlay || e.target.classList.contains('mobile-menu-backdrop')) {
+            closeMobileMenu();
+        }
+    });
+
+    // Mobile menu category links
+    document.querySelectorAll('.mobile-menu-link[data-category]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const category = link.dataset.category;
+            closeMobileMenu();
+
+            // Update active states
+            document.querySelectorAll('.category-pill').forEach(p => {
+                p.classList.toggle('active', p.dataset.category === category);
+            });
+            currentCategory = category;
+            fetchWallpapers(category);
+
+            // Scroll to gallery
+            const gallerySection = document.querySelector('.gallery-section');
+            if (gallerySection) {
+                setTimeout(() => gallerySection.scrollIntoView({ behavior: 'smooth' }), 300);
+            }
+        });
+    });
+
+    // Mobile menu nav links
+    document.querySelectorAll('.mobile-menu-link[data-nav]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const nav = link.dataset.nav;
+            const category = NAV_TO_CATEGORY[nav];
+            if (!category) return;
+            closeMobileMenu();
+
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.querySelectorAll('.category-pill').forEach(p => {
+                p.classList.toggle('active', p.dataset.category === category);
+            });
+            currentCategory = category;
+            fetchWallpapers(category);
+        });
+    });
+
+    // Swipe to close mobile menu
+    let touchStartX = 0;
+    DOM.mobileMenuOverlay.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+
+    DOM.mobileMenuOverlay.addEventListener('touchmove', (e) => {
+        const touchX = e.touches[0].clientX;
+        const diff = touchX - touchStartX;
+        if (diff < -50) {
+            closeMobileMenu();
+        }
+    }, { passive: true });
+}
+
+function openMobileMenu() {
+    if (!DOM.mobileMenuOverlay) return;
+    DOM.mobileMenuOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeMobileMenu() {
+    if (!DOM.mobileMenuOverlay) return;
+    DOM.mobileMenuOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
 function initContextMenu() {
     document.addEventListener('click', (e) => {
         if (DOM.customContextMenu && !DOM.customContextMenu.contains(e.target)) hideContextMenu();
@@ -735,6 +840,7 @@ function init() {
     initModal();
     initUiPreview();
     initUserPanel();
+    initMobileMenu();
     initContextMenu();
 
     // Account actions
@@ -772,6 +878,7 @@ function init() {
 
     loadWallpaperOfTheDay();
     fetchWallpapers('all');
+    initCategorySwipe();
 
     setTimeout(hideLoadingScreen, 2000);
     console.log('=== PHONETIC INIT COMPLETE ===');

@@ -12,6 +12,52 @@
 <base target="_blank">
 </head>
 <body>
+    <!-- Mobile Menu Overlay -->
+    <div id="mobileMenuOverlay" class="mobile-menu-overlay">
+        <div class="mobile-menu-backdrop"></div>
+        <div class="mobile-menu-panel">
+            <div class="mobile-menu-header">
+                <span class="mobile-menu-title">Menu</span>
+                <button id="mobileMenuClose" class="mobile-menu-close" aria-label="Close menu">
+                    <svg data-lucide="x" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
+            </div>
+            <div class="mobile-menu-links">
+                <a href="#" class="mobile-menu-link" data-nav="home">
+                    <span class="mobile-menu-icon">🏠</span> Home
+                </a>
+                <a href="#" class="mobile-menu-link" data-nav="top-rated">
+                    <span class="mobile-menu-icon">🔥</span> Top Rated
+                </a>
+                <a href="#" class="mobile-menu-link" data-nav="premium">
+                    <span class="mobile-menu-icon">💎</span> Premium
+                </a>
+                <a href="#" class="mobile-menu-link" data-nav="cars">
+                    <span class="mobile-menu-icon">🏎️</span> Cars
+                </a>
+                <a href="#" class="mobile-menu-link" data-nav="anime">
+                    <span class="mobile-menu-icon">🎌</span> Anime
+                </a>
+            </div>
+            <div class="mobile-menu-divider"></div>
+            <div class="mobile-menu-categories">
+                <p class="mobile-menu-section">Categories</p>
+                <a href="#" class="mobile-menu-link" data-category="abstract">Abstract</a>
+                <a href="#" class="mobile-menu-link" data-category="amoled">AMOLED</a>
+                <a href="#" class="mobile-menu-link" data-category="minimal">Minimal</a>
+                <a href="#" class="mobile-menu-link" data-category="scifi">Sci-Fi</a>
+                <a href="#" class="mobile-menu-link" data-category="nature">Nature</a>
+                <a href="#" class="mobile-menu-link" data-category="technology">Technology</a>
+                <a href="#" class="mobile-menu-link" data-category="sports">Sports</a>
+                <a href="#" class="mobile-menu-link" data-category="music">Music</a>
+                <a href="#" class="mobile-menu-link" data-category="cars">Cars</a>
+                <a href="#" class="mobile-menu-link" data-category="anime">Anime</a>
+                <a href="#" class="mobile-menu-link" data-category="space">Space</a>
+                <a href="#" class="mobile-menu-link" data-category="surreal">Surreal</a>
+                <a href="#" class="mobile-menu-link" data-category="cyberpunk">Cyberpunk</a>
+            </div>
+        </div>
+    </div>
     <div class="ambient-light"></div>
 
     <!-- Loading Screen -->
@@ -59,6 +105,9 @@
                 </a>
             </div>
 
+            <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Menu">
+                <svg data-lucide="menu" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
             <div class="nav-actions">
                 <div class="search-box">
                     <svg class="search-icon" data-lucide="search" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
