@@ -2975,3 +2975,9 @@ body {
         padding-bottom: max(2rem, env(safe-area-inset-bottom) + 1rem);
     }
 }
+
+/* Theme toggle visibility fix */
+[data-theme="light"] .sun { opacity: 1; transform: rotate(0) scale(1); }
+[data-theme="light"] .moon { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+[data-theme="dark"] .sun { opacity: 0; transform: rotate(90deg) scale(0.5); }
+[data-theme="dark"] .moon { opacity: 1; transform: rotate(0) scale(1); }
