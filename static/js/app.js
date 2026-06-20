@@ -1,4 +1,4 @@
-// Phonetic Wallpapers - Clean Rebuild v3.0
+// Phonetic Wallpapers - v3.1 (Fixed)
 console.log('=== PHONETIC APP LOADING ===');
 
 // ==================== GLOBAL STATE ====================
@@ -10,6 +10,7 @@ let currentDeviceType = 'desktop';
 let currentUser = null;
 let uiPreviewActive = false;
 let contextMenuTarget = null;
+let authMode = 'signup';
 
 // ==================== DOM REFERENCES ====================
 const $ = id => document.getElementById(id);
@@ -67,11 +68,12 @@ const wotdBtn = $('wotdBtn');
 const statCount = $('statCount');
 const userAvatarLarge = $('userAvatarLarge');
 const userNameDisplay = $('userNameDisplay');
-const createNewAccountBtn = $('createNewAccountBtn');
 const logoutBtn = $('logoutBtn');
 const mobileMenuBtn = $('mobileMenuBtn');
 const mobileMenuOverlay = $('mobileMenuOverlay');
 const mobileMenuClose = $('mobileMenuClose');
+const userInfoDisplay = $('userInfoDisplay');
+const modalFavoriteBtn = $('modalFavoriteBtn');
 
 // ==================== CONSTANTS ====================
 const CATEGORY_NAMES = {
@@ -189,7 +191,6 @@ async function toggleFavorite(wallpaperId, btn) {
     if (!currentUser) {
         openUserPanel();
         showToast('Login to save favorites');
-        setTimeout(() => { if (usernameInput) usernameInput.focus(); }, 300);
         return;
     }
     try {
@@ -386,7 +387,6 @@ function initCategories() {
         });
     });
 
-    // Desktop nav links
     document.querySelectorAll('.nav-link[data-nav]').forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
@@ -531,6 +531,7 @@ function initModal() {
             closeModal();
             if (userPanel) closeUserPanel();
             if (downloadModal) downloadModal.classList.remove('active');
+            if (mobileMenuOverlay) closeMobileMenu();
         }
     });
     document.querySelectorAll('.device-btn').forEach(btn => {
@@ -539,6 +540,17 @@ function initModal() {
     if (btnDownload) {
         btnDownload.addEventListener('click', () => {
             if (currentWallpaper) showDownloadModal(currentWallpaper);
+        });
+    }
+    if (modalFavoriteBtn) {
+        modalFavoriteBtn.addEventListener('click', () => {
+            if (!currentWallpaper) return;
+            const tmpBtn = document.createElement('button');
+            tmpBtn.dataset.id = currentWallpaper.id;
+            tmpBtn.className = modalFavoriteBtn.classList.contains('active') ? 'favorite-btn active' : 'favorite-btn';
+            toggleFavorite(currentWallpaper.id, tmpBtn).then(() => {
+                modalFavoriteBtn.classList.toggle('active', tmpBtn.classList.contains('active'));
+            });
         });
     }
     if (downloadModalClose) {
@@ -592,35 +604,41 @@ async function loadWallpaperOfTheDay() {
 }
 
 // ==================== USER PANEL ====================
-let authMode = 'signup'; // Tracks whether the user is viewing 'Sign Up' or 'Sign In'
-
 function initUserPanel() {
     const savedUser = localStorage.getItem('phonetic_user');
     if (savedUser) {
-        currentUser = JSON.parse(savedUser);
-        showUserAvatar(); // Standard account initialization fallback
+        try {
+            currentUser = JSON.parse(savedUser);
+            showUserAvatar();
+        } catch (e) {
+            localStorage.removeItem('phonetic_user');
+            currentUser = null;
+        }
     }
 
     if (accountBtn) accountBtn.addEventListener('click', openUserPanel);
     if (userAvatar) userAvatar.addEventListener('click', openUserPanel);
     if (userPanelClose) userPanelClose.addEventListener('click', closeUserPanel);
     if (userPanelOverlay) userPanelOverlay.addEventListener('click', closeUserPanel);
+    if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
 
-    // Wire custom dynamic view modal toggle hooks
-    const authToggleBtn = document.getElementById('authToggleBtn');
-    const mainAuthBtn = document.getElementById('mainAuthBtn');
+    const authToggleBtn = $('authToggleBtn');
+    const mainAuthBtn = $('mainAuthBtn');
+    const authFormTitle = $('authFormTitle');
+    const passwordLabel = $('passwordLabel');
+    const authTogglePrompt = $('authTogglePrompt');
+    const usernameFieldContainer = $('usernameFieldContainer');
 
-    if (authToggleBtn) {
+    if (authToggleBtn && authFormTitle && mainAuthBtn) {
         authToggleBtn.addEventListener('click', (e) => {
             e.preventDefault();
             authMode = authMode === 'signup' ? 'login' : 'signup';
-
-            document.getElementById('authFormTitle').innerText = authMode === 'signup' ? 'Create Account' : 'Sign In';
-            document.getElementById('passwordLabel').innerText = authMode === 'signup' ? 'Create Password' : 'Password';
+            authFormTitle.innerText = authMode === 'signup' ? 'Create Account' : 'Sign In';
+            if (passwordLabel) passwordLabel.innerText = authMode === 'signup' ? 'Create Password' : 'Password';
             mainAuthBtn.innerText = authMode === 'signup' ? 'Create Account' : 'Sign In';
-            document.getElementById('authTogglePrompt').innerText = authMode === 'signup' ? 'Already have an account?' : 'New to Phonetic?';
+            if (authTogglePrompt) authTogglePrompt.innerText = authMode === 'signup' ? 'Already have an account?' : 'New to Phonetic?';
             authToggleBtn.innerText = authMode === 'signup' ? 'Sign In' : 'Sign Up';
-            document.getElementById('usernameFieldContainer').style.display = authMode === 'signup' ? 'flex' : 'none';
+            if (usernameFieldContainer) usernameFieldContainer.style.display = authMode === 'signup' ? 'flex' : 'none';
         });
     }
 
@@ -628,25 +646,36 @@ function initUserPanel() {
         mainAuthBtn.addEventListener('click', handleCustomAuth);
     }
 
-    // Initialize Google Single-Sign-On Overlay safely via SDK hooks
-    if (typeof google !== 'undefined') {
-        google.accounts.id.initialize({
-            client_id: "935635974021-nfd0b1u8vkdeck1o1cc9afduipi8h6vm.apps.googleusercontent.com", // <-- PASTE YOUR KEY HERE
-            callback: handleGoogleCredentialResponse
-        });
-        google.accounts.id.renderButton(
-            document.getElementById("googleButtonTarget"),
-            { theme: "outline", size: "large", width: "100%", text: "continue_with" }
-        );
+    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+        try {
+            google.accounts.id.initialize({
+                client_id: "935635974021-nfd0b1u8vkdeck1o1cc9afduipi8h6vm.apps.googleusercontent.com",
+                callback: handleGoogleCredentialResponse
+            });
+            const googleBtnTarget = $('googleButtonTarget');
+            if (googleBtnTarget) {
+                google.accounts.id.renderButton(
+                    googleBtnTarget,
+                    { theme: "outline", size: "large", width: "100%", text: "continue_with" }
+                );
+            }
+        } catch (e) {
+            console.warn('Google SSO init failed:', e);
+        }
     }
+
+    if (userLoginBtn) userLoginBtn.addEventListener('click', handleLogin);
+    if (createCollectionBtn) createCollectionBtn.addEventListener('click', createCollection);
 }
 
-// --- NEW AUTHENTICATION HELPER FUNCTIONS (Keep these right below initUserPanel) ---
-
 async function handleCustomAuth() {
-    const email = document.getElementById('authEmailInput').value.trim();
-    const password = document.getElementById('authPasswordInput').value.trim();
-    const username = document.getElementById('authUsernameInput') ? document.getElementById('authUsernameInput').value.trim() : "";
+    const emailInput = $('authEmailInput');
+    const passwordInput = $('authPasswordInput');
+    const usernameInput = $('authUsernameInput');
+    
+    const email = emailInput ? emailInput.value.trim() : '';
+    const password = passwordInput ? passwordInput.value.trim() : '';
+    const username = usernameInput ? usernameInput.value.trim() : '';
 
     if (!email || !password || (authMode === 'signup' && !username)) {
         showToast('Please fill in all required fields');
@@ -696,13 +725,33 @@ function completeUserSession(userData) {
     showUserAvatar();
     closeUserPanel();
     showToast(`Logged in successfully as ${userData.username}!`);
+    renderGallery(wallpapers);
+}
+
+function handleLogout() {
+    currentUser = null;
+    localStorage.removeItem('phonetic_user');
+    showToast('Logged out successfully');
+    closeUserPanel();
+    if (userAvatar) {
+        userAvatar.textContent = '';
+        userAvatar.style.display = 'none';
+    }
+    if (accountBtn) accountBtn.style.display = 'flex';
+    if (userInfoDisplay) userInfoDisplay.style.display = 'none';
+    if (logoutBtn) logoutBtn.style.display = 'none';
+    if (userLoginSection) userLoginSection.style.display = 'flex';
+    if (userCollections) userCollections.style.display = 'none';
+    document.querySelectorAll('.favorite-btn.active').forEach(btn => btn.classList.remove('active'));
 }
 
 function showUserAvatar() {
-    if (!currentUser || !userAvatar) return;
+    if (!currentUser) return;
     const initial = currentUser.username.charAt(0).toUpperCase();
-    userAvatar.textContent = initial;
-    userAvatar.style.display = 'flex';
+    if (userAvatar) {
+        userAvatar.textContent = initial;
+        userAvatar.style.display = 'flex';
+    }
     if (accountBtn) accountBtn.style.display = 'none';
     if (userAvatarLarge) userAvatarLarge.textContent = initial;
     if (userNameDisplay) userNameDisplay.textContent = currentUser.username;
@@ -713,14 +762,30 @@ function openUserPanel() {
     userPanel.classList.add('active');
     if (userPanelOverlay) userPanelOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
+
     if (currentUser) {
         if (userLoginSection) userLoginSection.style.display = 'none';
+        if (userInfoDisplay) userInfoDisplay.style.display = 'flex';
+        if (logoutBtn) logoutBtn.style.display = 'flex';
         if (userCollections) userCollections.style.display = 'block';
         showUserAvatar();
         loadUserCollections();
     } else {
         if (userLoginSection) userLoginSection.style.display = 'flex';
+        if (userInfoDisplay) userInfoDisplay.style.display = 'none';
+        if (logoutBtn) logoutBtn.style.display = 'none';
         if (userCollections) userCollections.style.display = 'none';
+        authMode = 'signup';
+        const authFormTitle = $('authFormTitle');
+        const mainAuthBtn = $('mainAuthBtn');
+        const authToggleBtn = $('authToggleBtn');
+        const usernameFieldContainer = $('usernameFieldContainer');
+        const authTogglePrompt = $('authTogglePrompt');
+        if (authFormTitle) authFormTitle.innerText = 'Create Account';
+        if (mainAuthBtn) mainAuthBtn.innerText = 'Create Account';
+        if (authToggleBtn) authToggleBtn.innerText = 'Sign In';
+        if (authTogglePrompt) authTogglePrompt.innerText = 'Already have an account?';
+        if (usernameFieldContainer) usernameFieldContainer.style.display = 'flex';
     }
 }
 
@@ -800,7 +865,10 @@ function openModalFromFavorite(wallpaperId) {
 
 // ==================== MOBILE MENU ====================
 function initMobileMenu() {
-    if (!mobileMenuBtn || !mobileMenuOverlay || !mobileMenuClose) return;
+    if (!mobileMenuBtn || !mobileMenuOverlay || !mobileMenuClose) {
+        console.warn('Mobile menu elements not found');
+        return;
+    }
     mobileMenuBtn.addEventListener('click', openMobileMenu);
     mobileMenuClose.addEventListener('click', closeMobileMenu);
     mobileMenuOverlay.addEventListener('click', (e) => {
