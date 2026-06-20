@@ -74,6 +74,7 @@ const mobileMenuOverlay = $('mobileMenuOverlay');
 const mobileMenuClose = $('mobileMenuClose');
 const userInfoDisplay = $('userInfoDisplay');
 const modalFavoriteBtn = $('modalFavoriteBtn');
+const mobileQuickCategories = $('mobileQuickCategories');
 
 // ==================== CONSTANTS ====================
 const CATEGORY_NAMES = {
@@ -260,6 +261,27 @@ function renderGallery(data) {
     }
     data.forEach(w => galleryGrid.appendChild(createWallpaperCard(w)));
     createIcons();
+}
+
+// ==================== MOBILE QUICK CATEGORIES ====================
+function initMobileQuickCategories() {
+    if (!mobileQuickCategories) return;
+    mobileQuickCategories.querySelectorAll('.mobile-quick-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const category = item.dataset.category;
+            if (!category) return;
+            mobileQuickCategories.querySelectorAll('.mobile-quick-item').forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+            document.querySelectorAll('.category-pill').forEach(p => {
+                p.classList.toggle('active', p.dataset.category === category);
+            });
+            currentCategory = category;
+            fetchWallpapers(category);
+            const gallerySection = document.querySelector('.gallery-section');
+            if (gallerySection) gallerySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
 }
 
 // ==================== CONTEXT MENU ====================
@@ -959,6 +981,7 @@ function init() {
     initUserPanel();
     initContextMenu();
     initMobileMenu();
+    initMobileQuickCategories();
 
     loadWallpaperOfTheDay();
     fetchWallpapers('all');
