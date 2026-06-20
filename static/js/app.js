@@ -386,6 +386,27 @@ function initCategories() {
         });
     });
 
+
+    // (Inside initCategories, at the very bottom)
+    document.querySelectorAll('.qa-item[data-nav]').forEach(item => {
+        item.addEventListener('click', () => {
+            const category = item.dataset.nav;
+
+            // Visually activate corresponding bottom nav or pills
+            document.querySelectorAll('.mob-nav-item').forEach(l => l.classList.remove('active'));
+            document.querySelectorAll('.category-pill').forEach(p => {
+                p.classList.toggle('active', p.dataset.category === category);
+            });
+
+            currentCategory = category;
+            fetchWallpapers(category);
+
+            // Scroll down to gallery smoothly
+            const gallerySection = document.querySelector('.gallery-section');
+            if (gallerySection) gallerySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
     // Desktop nav links
     document.querySelectorAll('.nav-link[data-nav]').forEach(link => {
         link.addEventListener('click', (e) => {
@@ -622,6 +643,34 @@ function initUserPanel() {
             authToggleBtn.innerText = authMode === 'signup' ? 'Sign In' : 'Sign Up';
             document.getElementById('usernameFieldContainer').style.display = authMode === 'signup' ? 'flex' : 'none';
         });
+
+        // (Inside initUserPanel, right under your authToggleBtn code)
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => {
+                currentUser = null;
+                localStorage.removeItem('phonetic_user');
+
+                // Reset UI
+                if (userAvatar) userAvatar.style.display = 'none';
+                if (accountBtn) accountBtn.style.display = 'flex';
+
+                // Re-render Google button
+                if (typeof google !== 'undefined') {
+                    document.getElementById("googleButtonTarget").innerHTML = '';
+                    google.accounts.id.renderButton(
+                        document.getElementById("googleButtonTarget"),
+                        { theme: "outline", size: "large", width: "100%", text: "continue_with" }
+                    );
+                }
+
+                closeUserPanel();
+                showToast('Logged out successfully');
+
+                // Un-heart everything visually
+                document.querySelectorAll('.favorite-btn').forEach(btn => btn.classList.remove('active'));
+            });
+        }
     }
 
     if (mainAuthBtn) {
@@ -700,12 +749,13 @@ function completeUserSession(userData) {
 
 function showUserAvatar() {
     if (!currentUser || !userAvatar) return;
-    const initial = currentUser.username.charAt(0).toUpperCase();
-    userAvatar.textContent = initial;
+    userAvatar.textContent = currentUser.username.charAt(0).toUpperCase();
     userAvatar.style.display = 'flex';
     if (accountBtn) accountBtn.style.display = 'none';
-    if (userAvatarLarge) userAvatarLarge.textContent = initial;
-    if (userNameDisplay) userNameDisplay.textContent = currentUser.username;
+
+    // Show logout footer when logged in
+    const footer = document.getElementById('userPanelFooter');
+    if (footer) footer.style.display = 'block';
 }
 
 function openUserPanel() {
@@ -713,14 +763,18 @@ function openUserPanel() {
     userPanel.classList.add('active');
     if (userPanelOverlay) userPanelOverlay.classList.add('active');
     document.body.style.overflow = 'hidden';
+
     if (currentUser) {
         if (userLoginSection) userLoginSection.style.display = 'none';
         if (userCollections) userCollections.style.display = 'block';
-        showUserAvatar();
+        const footer = document.getElementById('userPanelFooter');
+        if (footer) footer.style.display = 'block';
         loadUserCollections();
     } else {
         if (userLoginSection) userLoginSection.style.display = 'flex';
         if (userCollections) userCollections.style.display = 'none';
+        const footer = document.getElementById('userPanelFooter');
+        if (footer) footer.style.display = 'none';
     }
 }
 
