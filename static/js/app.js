@@ -631,7 +631,7 @@ function initUserPanel() {
     // Initialize Google Single-Sign-On Overlay safely via SDK hooks
     if (typeof google !== 'undefined') {
         google.accounts.id.initialize({
-            client_id: "PASTE_YOUR_COPIED_CLIENT_ID_HERE.apps.googleusercontent.com", // <-- PASTE YOUR KEY HERE
+            client_id: "935635974021-nfd0b1u8vkdeck1o1cc9afduipi8h6vm.apps.googleusercontent.com", // <-- PASTE YOUR KEY HERE
             callback: handleGoogleCredentialResponse
         });
         google.accounts.id.renderButton(
