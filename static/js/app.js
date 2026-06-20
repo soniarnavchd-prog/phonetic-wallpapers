@@ -221,7 +221,7 @@ function createWallpaperCard(wallpaper) {
     img.alt = wallpaper.title || 'Wallpaper';
     img.loading = 'lazy';
     img.draggable = false;
-    img.onerror = function() { this.src = wallpaper.image_url; };
+    img.onerror = function () { this.src = wallpaper.image_url; };
 
     img.addEventListener('contextmenu', (e) => { e.preventDefault(); showContextMenu(e, wallpaper); });
     card.addEventListener('contextmenu', (e) => { e.preventDefault(); showContextMenu(e, wallpaper); });
@@ -232,7 +232,7 @@ function createWallpaperCard(wallpaper) {
     favBtn.dataset.id = wallpaper.id;
     favBtn.setAttribute('aria-label', 'Add to favorites');
 
-    checkFavorite(wallpaper.id).then(isFav => { if (isFav) favBtn.classList.add('active'); }).catch(() => {});
+    checkFavorite(wallpaper.id).then(isFav => { if (isFav) favBtn.classList.add('active'); }).catch(() => { });
     favBtn.addEventListener('click', (e) => { e.stopPropagation(); toggleFavorite(wallpaper.id, favBtn); });
 
     const overlay = document.createElement('div');
@@ -412,8 +412,8 @@ function initSearch() {
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value.toLowerCase().trim();
         if (!query) { renderGallery(wallpapers); return; }
-        const filtered = wallpapers.filter(w => 
-            (w.title && w.title.toLowerCase().includes(query)) || 
+        const filtered = wallpapers.filter(w =>
+            (w.title && w.title.toLowerCase().includes(query)) ||
             (w.category && w.category.toLowerCase().includes(query))
         );
         renderGallery(filtered);
@@ -592,49 +592,110 @@ async function loadWallpaperOfTheDay() {
 }
 
 // ==================== USER PANEL ====================
+let authMode = 'signup'; // Tracks whether the user is viewing 'Sign Up' or 'Sign In'
+
 function initUserPanel() {
     const savedUser = localStorage.getItem('phonetic_user');
     if (savedUser) {
-        try {
-            currentUser = JSON.parse(savedUser);
-            showUserAvatar();
-        } catch (e) {
-            localStorage.removeItem('phonetic_user');
-        }
+        currentUser = JSON.parse(savedUser);
+        showUserAvatar(); // Standard account initialization fallback
     }
+
     if (accountBtn) accountBtn.addEventListener('click', openUserPanel);
     if (userAvatar) userAvatar.addEventListener('click', openUserPanel);
     if (userPanelClose) userPanelClose.addEventListener('click', closeUserPanel);
     if (userPanelOverlay) userPanelOverlay.addEventListener('click', closeUserPanel);
-    if (userLoginBtn) userLoginBtn.addEventListener('click', handleLogin);
-    if (usernameInput) {
-        usernameInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleLogin(); });
-    }
-    if (createCollectionBtn) createCollectionBtn.addEventListener('click', createCollection);
-    if (newCollectionInput) {
-        newCollectionInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') createCollection(); });
-    }
-    if (createNewAccountBtn) {
-        createNewAccountBtn.addEventListener('click', () => {
-            currentUser = null;
-            localStorage.removeItem('phonetic_user');
-            if (userAvatar) userAvatar.style.display = 'none';
-            if (accountBtn) accountBtn.style.display = 'flex';
-            openUserPanel();
-            showToast('Create a new account');
+
+    // Wire custom dynamic view modal toggle hooks
+    const authToggleBtn = document.getElementById('authToggleBtn');
+    const mainAuthBtn = document.getElementById('mainAuthBtn');
+
+    if (authToggleBtn) {
+        authToggleBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            authMode = authMode === 'signup' ? 'login' : 'signup';
+
+            document.getElementById('authFormTitle').innerText = authMode === 'signup' ? 'Create Account' : 'Sign In';
+            document.getElementById('passwordLabel').innerText = authMode === 'signup' ? 'Create Password' : 'Password';
+            mainAuthBtn.innerText = authMode === 'signup' ? 'Create Account' : 'Sign In';
+            document.getElementById('authTogglePrompt').innerText = authMode === 'signup' ? 'Already have an account?' : 'New to Phonetic?';
+            authToggleBtn.innerText = authMode === 'signup' ? 'Sign In' : 'Sign Up';
+            document.getElementById('usernameFieldContainer').style.display = authMode === 'signup' ? 'flex' : 'none';
         });
     }
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-            currentUser = null;
-            localStorage.removeItem('phonetic_user');
-            if (userAvatar) userAvatar.style.display = 'none';
-            if (accountBtn) accountBtn.style.display = 'flex';
-            closeUserPanel();
-            showToast('Logged out successfully');
-            document.querySelectorAll('.favorite-btn').forEach(btn => btn.classList.remove('active'));
-        });
+
+    if (mainAuthBtn) {
+        mainAuthBtn.addEventListener('click', handleCustomAuth);
     }
+
+    // Initialize Google Single-Sign-On Overlay safely via SDK hooks
+    if (typeof google !== 'undefined') {
+        google.accounts.id.initialize({
+            client_id: "PASTE_YOUR_COPIED_CLIENT_ID_HERE.apps.googleusercontent.com", // <-- PASTE YOUR KEY HERE
+            callback: handleGoogleCredentialResponse
+        });
+        google.accounts.id.renderButton(
+            document.getElementById("googleButtonTarget"),
+            { theme: "outline", size: "large", width: "100%", text: "continue_with" }
+        );
+    }
+}
+
+// --- NEW AUTHENTICATION HELPER FUNCTIONS (Keep these right below initUserPanel) ---
+
+async function handleCustomAuth() {
+    const email = document.getElementById('authEmailInput').value.trim();
+    const password = document.getElementById('authPasswordInput').value.trim();
+    const username = document.getElementById('authUsernameInput') ? document.getElementById('authUsernameInput').value.trim() : "";
+
+    if (!email || !password || (authMode === 'signup' && !username)) {
+        showToast('Please fill in all required fields');
+        return;
+    }
+
+    const endpoint = authMode === 'signup' ? '/api/auth/signup' : '/api/auth/login';
+    const bodyPayload = authMode === 'signup'
+        ? `username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
+        : `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+
+    try {
+        const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: bodyPayload
+        });
+        const data = await response.json();
+
+        if (!response.ok) throw new Error(data.detail || 'Authentication failed');
+
+        completeUserSession(data);
+    } catch (e) {
+        showToast(e.message);
+    }
+}
+
+async function handleGoogleCredentialResponse(response) {
+    try {
+        const res = await fetch('/api/auth/google', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `credential=${encodeURIComponent(response.credential)}`
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || 'Google Login failed');
+
+        completeUserSession(data);
+    } catch (e) {
+        showToast(e.message);
+    }
+}
+
+function completeUserSession(userData) {
+    currentUser = { id: userData.id, username: userData.username };
+    localStorage.setItem('phonetic_user', JSON.stringify(currentUser));
+    showUserAvatar();
+    closeUserPanel();
+    showToast(`Logged in successfully as ${userData.username}!`);
 }
 
 function showUserAvatar() {

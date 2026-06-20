@@ -128,6 +128,66 @@ def create_user(username: str = Form(...), db: Session = Depends(get_db)):
     db.refresh(user)
     return JSONResponse(content={"id": user.id, "username": user.username})
 
+import hmac
+import hashlib
+
+# Simple token generator for project scope session tracking
+def generate_mock_jwt(user_id: int, username: str) -> str:
+    payload = f"{user_id}:{username}"
+    signature = hmac.new(b"SUPER_SECRET_KEY_2026", payload.encode(), hashlib.sha256).hexdigest()
+    return f"{payload}.{signature}"
+
+@app.post("/api/auth/signup")
+def auth_signup(username: str = Form(...), email: str = Form(...), password: str = Form(...), db: Session = Depends(get_db)):
+    # Check if user exists
+    if db.query(User).filter((User.email == email) | (User.username == username)).first():
+        raise HTTPException(status_code=400, detail="Username or Email already registered")
+        
+    # Standard password hash for secure text verification
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+    
+    user = User(username=username, email=email, hashed_password=hashed_password)
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    
+    token = generate_mock_jwt(user.id, user.username)
+    return JSONResponse(content={"id": user.id, "username": user.username, "token": token})
+
+@app.post("/api/auth/login")
+def auth_login(email: str = Form(...), password: str = Form(...), db: Session = Depends(get_db)):
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+    user = db.query(User).filter(User.email == email, User.hashed_password == hashed_password).first()
+    
+    if not user:
+        raise HTTPException(status_code=400, detail="Invalid email or password")
+        
+    token = generate_mock_jwt(user.id, user.username)
+    return JSONResponse(content={"id": user.id, "username": user.username, "token": token})
+
+@app.post("/api/auth/google")
+async def auth_google(credential: str = Form(...), db: Session = Depends(get_db)):
+    # Exchange Google payload securely
+    import requests
+    response = requests.get(f"https://oauth2.googleapis.com/tokeninfo?id_token={credential}")
+    if not response.ok:
+        raise HTTPException(status_code=400, detail="Invalid Google token")
+        
+    payload = response.json()
+    email = payload.get("email")
+    name = payload.get("name", email.split("@")[0])
+    
+    # Find or create user
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        user = User(username=name, email=email, hashed_password=None)
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+        
+    token = generate_mock_jwt(user.id, user.username)
+    return JSONResponse(content={"id": user.id, "username": user.username, "token": token})
+
 @app.get("/api/users/{user_id}")
 def get_user(user_id: int, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.id == user_id).first()

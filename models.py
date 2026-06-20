@@ -23,11 +23,13 @@ class User(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, nullable=False, index=True)
+    email = Column(String, unique=True, nullable=True, index=True) # Nullable for old users
+    hashed_password = Column(String, nullable=True) # Nullable for Google-only users
     created_at = Column(DateTime, default=datetime.utcnow)
     
     # Relationship to favorites
     favorites = relationship("Favorite", back_populates="user", cascade="all, delete-orphan")
-
+    
 class Favorite(Base):
     __tablename__ = "favorites"
     
