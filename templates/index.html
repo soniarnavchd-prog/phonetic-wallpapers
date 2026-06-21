@@ -659,37 +659,37 @@
         </div>
 
         <div class="user-panel-content">
-            <div class="auth-container" id="userLoginSection">
-                <h4 id="authFormTitle" class="auth-title">Create Account</h4>
+            <div id="userLoginSection" style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
+                <h4 id="authFormTitle" style="font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; margin-bottom: 0;">Create Account</h4>
                 
-                <div id="usernameFieldContainer" class="auth-input-group">
-                    <label>Username</label>
-                    <input type="text" id="authUsernameInput" class="auth-input" placeholder="Choose a public username...">
+                <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                    <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Username</label>
+                    <input type="text" id="authUsernameInput" placeholder="Choose a public username..." style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 0.875rem 1rem; color: var(--text-primary); width: 100%; box-sizing: border-box; outline: none;">
                 </div>
 
-                <div class="auth-input-group">
-                    <label>Email Address</label>
-                    <input type="email" id="authEmailInput" class="auth-input" placeholder="Enter email address...">
+                <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                    <label style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Email Address</label>
+                    <input type="email" id="authEmailInput" placeholder="Enter email address..." style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 0.875rem 1rem; color: var(--text-primary); width: 100%; box-sizing: border-box; outline: none;">
                 </div>
 
-                <div class="auth-input-group">
-                    <label id="passwordLabel">Create Password</label>
-                    <input type="password" id="authPasswordInput" class="auth-input" placeholder="••••••••">
+                <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+                    <label id="passwordLabel" style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Create Password</label>
+                    <input type="password" id="authPasswordInput" placeholder="••••••••" style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 0.875rem 1rem; color: var(--text-primary); width: 100%; box-sizing: border-box; outline: none;">
                 </div>
 
-                <button class="btn-primary" id="mainAuthBtn" style="margin-top: 0.5rem; width: 100%;">Create Account</button>
+                <button id="mainAuthBtn" style="background: linear-gradient(135deg, var(--accent), var(--accent-pink)); color: white; border: none; border-radius: 12px; padding: 0.875rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 0.5rem; transition: transform 0.2s;">Create Account</button>
                 
-                <div class="auth-divider">
-                    <div class="divider-line"></div>
-                    <span>Or continue with</span>
-                    <div class="divider-line"></div>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin: 0.5rem 0;">
+                    <div style="height: 1px; background: var(--border); flex: 1;"></div>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Or continue with</span>
+                    <div style="height: 1px; background: var(--border); flex: 1;"></div>
                 </div>
 
-                <div id="googleButtonTarget" class="google-btn-wrapper"></div>
+                <div id="googleButtonTarget" style="display: flex; justify-content: center; width: 100%;"></div>
 
-                <p class="auth-footer-text">
+                <p style="font-size: 0.8rem; text-align: center; color: var(--text-secondary); margin-top: 0.5rem;">
                     <span id="authTogglePrompt">Already have an account?</span> 
-                    <a href="#" id="authToggleBtn">Sign In</a>
+                    <a href="#" id="authToggleBtn" style="color: var(--accent); font-weight: 700; text-decoration: none;">Sign In</a>
                 </p>
             </div>
 
