@@ -13,6 +13,8 @@
         rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <base target="_blank">
+<base target="_blank">
 </head>
 
 <body>
@@ -382,7 +384,8 @@
                                 </svg>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                                     <path
-                                        d="M12 3c-5 0-9 4-9 9 0 5 4 9 9 9s9-4 9-9c0-5-4-9-9-9zm0 16c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v5l4 2" />
+                                        d="M12 3c-5 0-9 4-9 9 0 5 4 9 9 9s9-4 9-9c0-5-4-9-9-9zm0 16c-3.9 0-7-3.1-7-7s3.1-7 7-7 7 3.1 7 7-3.1 7-7 7z" />
+                                    <path d="M12 7v5l4 2" />
                                 </svg>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                                     <path
@@ -545,7 +548,7 @@
                                 <div class="taskbar-app-icon" style="background: #5C2D91;"><svg width="18" height="18"
                                         viewBox="0 0 24 24" fill="white">
                                         <path
-                                            d="M12 3c-4.97 0-9 4.03-9 9 0 5 4 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
+                                            d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
                                     </svg></div>
                             </div>
                             <div class="taskbar-tray">
@@ -555,7 +558,7 @@
                                 </svg>
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="white">
                                     <path
-                                        d="M12 3c-4.8 0-9 3.86-9 9 0 2.12.74 4.07 1.97 5.61L3 21l3.39-1.97A8.93 8.93 0 0012 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v5l4 2" />
+                                        d="M12 3c-4.8 0-9 3.86-9 9 0 2.12.74 4.07 1.97 5.61L3 21l3.39-1.97A8.93 8.93 0 0012 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 16c-1.86 0-3.63-.5-5.17-1.45l-.37-.22-2.02 1.17.56-2.02-.22-.37A7.93 7.93 0 014 12c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7z" />
                                 </svg>
                                 <span id="desktopTime">9:41 AM</span>
                             </div>
@@ -651,18 +654,17 @@
 
     <!-- User Panel -->
     <div class="user-panel-overlay" id="userPanelOverlay"></div>
-    <div class="user-panel" id="userPanel">
-        <div class="user-panel-header">
-            <h3>Account</h3>
-            <button id="userPanelClose" class="user-panel-close" aria-label="Close panel">
-                <svg data-lucide="x" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M18 6 6 18" />
-                    <path d="m6 6 12 12" />
-                </svg>
-            </button>
-        </div>
-
+<div class="user-panel" id="userPanel">
+    <div class="user-panel-header">
+        <h3>Account</h3>
+        <button id="userPanelClose" class="user-panel-close" aria-label="Close panel">
+            <svg data-lucide="x" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+            </svg>
+        </button>
+    </div>
+    <div class="user-panel-body">
         <!-- Premium Sliding Auth Form -->
         <div id="userLoginSection" class="auth-wrapper">
             <div class="auth-slider" id="authSlider">
@@ -698,23 +700,27 @@
             </div>
         </div>
 
-        <div id="userCollections" style="display:none; padding-bottom: 2rem;">
+        <div id="userCollections" style="display:none;">
             <div class="collection-input" style="margin-bottom: 1rem;">
                 <input type="text" id="newCollectionInput" placeholder="New collection name..."
                     style="width: 100%; padding: 0.875rem; border-radius: 12px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); margin-bottom: 0.5rem;">
                 <button id="createCollectionBtn" onclick="createCollection()"
-                        style="width: 100%; padding: 0.875rem; border-radius: 12px; background: var(--accent); color:
+                        style=" width: 100%; padding: 0.875rem; border-radius: 12px; background: var(--accent); color:
                     white; border: none; font-weight: 600;">Create
                     Collection</button>
             </div>
             <div id="collectionsList"></div>
         </div>
+    </div>
+    </div>
 
-        <div class="user-panel-footer" id="userPanelFooter" style="display: none;">
-            <button id="logoutBtn" class="logout-btn">
-                <i data-lucide="log-out"></i> Log Out
-            </button>
-        </div>
+    <div class="user-panel-footer" id="userPanelFooter" style="display: none;">
+        <button id="logoutBtn" class="logout-btn">
+            <i data-lucide="log-out"></i> Log Out
+        </button>
+    </div>
+    </div>
+    </div>
     </div>
 
     <!-- Context Menu -->

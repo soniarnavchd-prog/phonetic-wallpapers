@@ -1416,6 +1416,19 @@ body {
   opacity: 1;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Download Modal */
 .download-modal {
   position: fixed;
@@ -1783,6 +1796,21 @@ body {
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
 }
 
+.user-panel-footer {
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid var(--border);
+  background: var(--bg-secondary);
+  margin-top: auto;
+}
+
+/* Center auth form inside user panel */
+.user-panel .auth-wrapper {
+  width: 100%;
+  max-width: 340px;
+  margin: 1.5rem auto;
+  height: 440px;
+}
+
 .btn-primary {
   padding: 0.875rem 1.5rem;
   background: linear-gradient(135deg, var(--accent), var(--accent-pink));
@@ -2148,6 +2176,11 @@ body {
   }
 }
 
+
+/* ============================================
+   NEW FIXES: Loading Logo, Download Close, UI Mockups
+   ============================================ */
+
 /* Loading Logo - Gradient "P" text */
 .loading-logo {
   display: flex;
@@ -2376,7 +2409,7 @@ body {
   gap: 0.3rem;
 }
 
-/* Logout Button */
+/* ---- PROFESSIONAL LOGOUT BUTTON (GLOBAL) ---- */
 .logout-btn {
   width: 100%;
   padding: 12px 20px;
@@ -2634,7 +2667,11 @@ body {
   height: 28px;
 }
 
-/* User Panel Enhancements */
+
+/* ============================================
+   USER PANEL ENHANCEMENTS
+   ============================================ */
+
 .user-info-display {
   display: flex;
   align-items: center;
@@ -2926,6 +2963,11 @@ body {
   }
 }
 
+
+/* ============================================
+   MOBILE OPTIMIZATION - Complete Responsive Design
+   ============================================ */
+
 /* Mobile Menu */
 .mobile-menu-btn {
   display: none;
@@ -3085,12 +3127,258 @@ body {
   min-height: 44px;
 }
 
-/* Mobile Quick Actions */
-.mobile-quick-actions {
-  display: none;
+/* ============================================
+   MOBILE RESPONSIVE (max-width: 640px)
+   ============================================ */
+@media (max-width: 640px) {
+
+  /* ---- LIGHT MODE OVERRIDES FIX ---- */
+  [data-theme="light"] {
+    --bg-primary: #f2f2f7;
+    --bg-secondary: #ffffff;
+    --bg-card: #ffffff;
+    --text-primary: #000000;
+    --text-secondary: #666666;
+    --border: rgba(0, 0, 0, 0.1);
+  }
+
+  [data-theme="light"] body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+  }
+
+  [data-theme="light"] .navbar {
+    background: rgba(255, 255, 255, 0.95);
+  }
+
+  [data-theme="light"] .user-panel {
+    background: var(--bg-secondary);
+  }
+
+  [data-theme="light"] .mobile-bottom-nav {
+    background: rgba(255, 255, 255, 0.98);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  [data-theme="light"] input {
+    background: #f2f2f7 !important;
+    color: #000 !important;
+    border-color: rgba(0, 0, 0, 0.1) !important;
+  }
+
+  /* ---- USER PANEL SCROLL & LOGOUT ---- */
+  .user-panel {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  .user-panel-content {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 2rem;
+    scrollbar-width: thin;
+  }
+
+  .user-panel-footer {
+    padding: 1rem 1.5rem;
+    margin-top: auto;
+    border-top: 1px solid var(--border);
+    background: var(--bg-secondary);
+  }
+
+  .logout-btn {
+    width: 100%;
+    padding: 0.875rem;
+    border-radius: 12px;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.05);
+    color: #ef4444;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+  }
+
+  .logout-btn:hover {
+    background: rgba(239, 68, 68, 0.15);
+  }
+
+  /* ---- MOBILE QUICK CATEGORIES ---- */
+  /* ---- MOBILE QUICK CATEGORIES ---- */
+  .mobile-quick-actions {
+    display: none !important;
+    /* Forces it to hide on laptops ALWAYS */
+  }
+
+  /* Ensure it reappears ONLY on mobile */
+  @media (max-width: 640px) {
+    .mobile-quick-actions {
+      display: flex !important;
+      overflow-x: auto;
+      gap: 1rem;
+      padding: 1rem;
+      scrollbar-width: none;
+    }
+  }
+
+  /* ---- RESPONSIVE MOBILE OPTIMIZATIONS (IMAGE 1 & 2 REPLICA) ---- */
+
+  /* ============================================
+   MODERN AUTH FORM & GOOGLE FIX
+   ============================================ */
+  .auth-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .auth-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .auth-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .auth-input-group label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .auth-input {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.875rem 1rem;
+    color: var(--text-primary);
+    outline: none;
+    transition: all 0.3s ease;
+    width: 100%;
+  }
+
+  .auth-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  }
+
+  .auth-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 0.5rem 0;
+  }
+
+  .divider-line {
+    height: 1px;
+    background: var(--border);
+    flex: 1;
+  }
+
+  .auth-divider span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .google-btn-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 8px;
+  }
+
+  .auth-footer-text {
+    font-size: 0.8rem;
+    text-align: center;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+  }
+
+  .auth-footer-text a {
+    color: var(--accent);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  /* ============================================
+   PHONE PREVIEW SCALING FIX
+   ============================================ */
+  .phone-ui-mock {
+    transform: scale(0.85);
+    /* Scaled down slightly more to fit */
+    transform-origin: top center;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+    /* Prevents horizontal spill */
+  }
+
+  .phone-notch {
+    top: 0;
+    width: 110px;
+    height: 24px;
+    background: #0a0a0f;
+    border-radius: 0 0 14px 14px;
+    margin: 0 auto;
+  }
+
+  .phone-apps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.25rem;
+    /* Tighter gap */
+    width: 100%;
+    padding: 0 0.5rem;
+    box-sizing: border-box;
+  }
+
+  .phone-app-icon svg {
+    width: 34px;
+    height: 34px;
+    padding: 6px;
+  }
+
+  .phone-dock {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    /* Tighter gap */
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(25px);
+    border-radius: 20px;
+    margin: 0 auto;
+    width: 90%;
+    /* Prevents hitting the edges */
+    box-sizing: border-box;
+  }
+
+  /* ============================================
+   STRICT DESKTOP OVERRIDES
+   ============================================ */
+@media (min-width: 641px) {
+  .mobile-quick-actions, 
+  .mobile-only {
+    display: none !important; /* This permanently kills the bleeding categories */
+  }
 }
 
-/* Auth Wrapper (Sliding Auth) */
+/* ============================================
+   PREMIUM SLIDING AUTH FORM
+   ============================================ */
 .auth-wrapper {
   position: relative;
   width: 100%;
@@ -3102,14 +3390,12 @@ body {
   box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
   margin-bottom: 1rem;
 }
-
 .auth-slider {
   display: flex;
   width: 200%;
   height: 100%;
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
 .auth-panel {
   width: 50%;
   height: 100%;
@@ -3121,7 +3407,6 @@ body {
   gap: 0.75rem;
   box-sizing: border-box;
 }
-
 .auth-panel h3 {
   color: #1a1a25;
   text-align: center;
@@ -3129,7 +3414,6 @@ body {
   font-size: 1.25rem;
   margin-bottom: 0.5rem;
 }
-
 .auth-panel input {
   background: #f4f4f9;
   border: 1px solid #e2e2e8;
@@ -3141,11 +3425,7 @@ body {
   font-family: 'Inter', sans-serif;
   transition: border-color 0.3s;
 }
-
-.auth-panel input:focus {
-  border-color: #6366f1;
-}
-
+.auth-panel input:focus { border-color: #6366f1; }
 .auth-submit-btn {
   background: linear-gradient(135deg, #6366f1, #a855f7);
   color: white;
@@ -3157,212 +3437,170 @@ body {
   width: 100%;
   transition: transform 0.2s, box-shadow 0.2s;
 }
-
 .auth-submit-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
-
 .auth-divider {
   text-align: center;
   position: relative;
   margin: 0.25rem 0;
 }
-
 .auth-divider::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 100%;
-  height: 1px;
-  background: #e2e2e8;
-  z-index: 1;
+  content: ""; position: absolute; left: 0; top: 50%; width: 100%; height: 1px; background: #e2e2e8; z-index: 1;
 }
-
 .auth-divider span {
-  background: white;
-  padding: 0 10px;
-  color: #a0a0b0;
-  font-size: 0.75rem;
-  position: relative;
-  z-index: 2;
+  background: white; padding: 0 10px; color: #a0a0b0; font-size: 0.75rem; position: relative; z-index: 2;
 }
+.auth-switch { text-align: center; font-size: 0.8rem; color: #6b6b7b; margin-top: auto; }
+.auth-switch a { color: #6366f1; font-weight: 700; text-decoration: none; }
+.google-btn-wrapper { display: flex; justify-content: center; width: 100%; overflow: hidden; border-radius: 8px;}
 
-.auth-switch {
-  text-align: center;
-  font-size: 0.8rem;
-  color: #6b6b7b;
-  margin-top: auto;
-}
-
-.auth-switch a {
-  color: #6366f1;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.google-btn-wrapper {
-  display: flex;
-  justify-content: center;
+/* ============================================
+   PHONE PREVIEW SCALING FIX
+   ============================================ */
+.phone-ui-mock {
+  transform: scale(0.75); 
+  transform-origin: top center;
   width: 100%;
-  overflow: hidden;
-  border-radius: 8px;
+  box-sizing: border-box;
+  overflow: hidden; 
 }
-
-/* Desktop overrides */
-@media (min-width: 641px) {
-  .mobile-quick-actions,
-  .mobile-only {
-    display: none !important;
-  }
+.phone-apps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.25rem;
+  padding: 0 0.5rem;
 }
+.phone-app-icon svg {
+  width: 32px;
+  height: 32px;
+  padding: 5px;
+}
+.phone-dock {
+  width: 85%;
+  gap: 0.4rem;
+  padding: 0.5rem;
+}
+.phone-dock-app svg { width: 22px; height: 22px; }
 
-/* Mobile-specific overrides */
-@media (max-width: 640px) {
-  .mobile-menu-btn {
-    display: flex;
-  }
+  /* ==========================================
+   MOBILE RESPONSIVE (max-width: 640px)
+   ========================================== */
+  @media (max-width: 640px) {
+    body {
+      padding-bottom: 70px;
+    }
 
-  .mobile-quick-actions {
-    display: flex !important;
-    overflow-x: auto;
-    gap: 1rem;
-    padding: 1rem;
-    scrollbar-width: none;
-  }
+    /* 1. RESTORE TOP NAVBAR */
+    .nav-actions {
+      display: flex !important;
+      align-items: center;
+      gap: 0.75rem;
+    }
 
-  body {
-    padding-bottom: 70px;
-  }
+    .search-container {
+      display: none;
+    }
 
-  .nav-actions {
-    display: flex !important;
-    align-items: center;
-    gap: 0.75rem;
-  }
+    /* Hide full search bar to save space */
+    .mobile-search-icon {
+      display: flex;
+    }
 
-  .search-container {
-    display: none;
-  }
+    /* Ensure search icon is visible */
+    .theme-toggle,
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+    }
 
-  .mobile-search-icon {
-    display: flex;
-  }
+    /* 2. ZEDGE-STYLE MASONRY GRID */
+    .gallery-section {
+      padding: 0.5rem;
+    }
 
-  .theme-toggle,
-  .user-avatar {
-    width: 32px;
-    height: 32px;
-  }
+    .gallery-grid {
+      display: block !important;
+      /* Override standard grid */
+      column-count: 2;
+      /* 2 columns stops the congestion */
+      column-gap: 8px;
+    }
 
-  .gallery-section {
-    padding: 0.5rem;
-  }
+    .wallpaper-card {
+      display: inline-block;
+      width: 100%;
+      margin: 0 0 8px 0 !important;
+      border-radius: 12px !important;
+      break-inside: avoid;
+      /* Prevents images from splitting across columns */
+      position: relative;
+    }
 
-  .gallery-grid {
-    display: block !important;
-    column-count: 2;
-    column-gap: 8px;
-  }
+    .card-overlay {
+      padding: 0.5rem !important;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    }
 
-  .wallpaper-card {
-    display: inline-block;
-    width: 100%;
-    margin: 0 0 8px 0 !important;
-    border-radius: 12px !important;
-    break-inside: avoid;
-    position: relative;
-  }
+    .card-title {
+      font-size: 0.75rem !important;
+    }
 
-  .card-overlay {
-    padding: 0.5rem !important;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
-  }
+    .card-meta {
+      display: none !important;
+    }
 
-  .card-title {
-    font-size: 0.75rem !important;
-  }
+    /* 3. CATEGORIES & WALLPAPER OF THE DAY SPACING */
+    .category-pills {
+      padding: 0.5rem;
+      gap: 0.5rem;
+      overflow-x: auto;
+      scrollbar-width: none;
+      margin-bottom: 1rem;
+    }
 
-  .card-meta {
-    display: none !important;
-  }
+    .featured-section {
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+    }
 
-  .category-pills {
-    padding: 0.5rem;
-    gap: 0.5rem;
-    overflow-x: auto;
-    scrollbar-width: none;
-    margin-bottom: 1rem;
-  }
+    .featured-card {
+      border-radius: 16px;
+      min-height: 200px;
+    }
 
-  .featured-section {
-    padding: 0.5rem;
-    margin-bottom: 1rem;
-  }
+    /* 4. FIX PREVIEW MODAL ZOOM & CUTOFF */
+    .modal-container {
+      height: 100dvh;
+      /* Uses dynamic viewport height for mobile browsers */
+      max-height: 100dvh;
+      border-radius: 0;
+      display: flex;
+      flex-direction: column;
+    }
 
-  .featured-card {
-    border-radius: 16px;
-    min-height: 200px;
-  }
+    .modal-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      background: #000;
+      /* Black background for immersive viewing */
+    }
 
-  .modal-container {
-    height: 100dvh;
-    max-height: 100dvh;
-    border-radius: 0;
-    display: flex;
-    flex-direction: column;
-  }
+    .modal-image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain !important;
+      /* 'Contain' ensures the whole image fits without zooming/cropping */
+    }
 
-  .modal-body {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    background: #000;
-  }
-
-  .modal-image {
-    width: 100%;
-    height: 100%;
-    object-fit: contain !important;
-  }
-
-  .user-panel {
-    width: 100%;
-    right: -100%;
-  }
-
-  .phone-ui-mock {
-    transform: scale(0.75);
-    transform-origin: top center;
-    width: 100%;
-    box-sizing: border-box;
-    overflow: hidden;
-  }
-
-  .phone-apps-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.25rem;
-    padding: 0 0.5rem;
-  }
-
-  .phone-app-icon svg {
-    width: 32px;
-    height: 32px;
-    padding: 5px;
-  }
-
-  .phone-dock {
-    width: 85%;
-    gap: 0.4rem;
-    padding: 0.5rem;
-  }
-
-  .phone-dock-app svg {
-    width: 22px;
-    height: 22px;
+    /* 5. USER PANEL SIZING */
+    .user-panel {
+      width: 100%;
+      right: -100%;
+    }
   }
 }
