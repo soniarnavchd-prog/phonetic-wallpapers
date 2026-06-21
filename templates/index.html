@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 
 <head>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://accounts.google.com/gsi/client"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Phonetic - Premium Wallpapers</title>
@@ -229,7 +229,7 @@
     </div>
 
     <!-- Categories -->
-    <div class="mobile-quick-actions">
+    <div id="mobileQuickCategories" class="mobile-quick-actions mobile-only">
         <div class="qa-item" data-nav="premium">
             <div class="qa-icon" style="background: rgba(217, 70, 239, 0.1); color: var(--accent-pink);">
                 <i data-lucide="crown"></i>
@@ -659,51 +659,37 @@
         </div>
 
         <div class="user-panel-content">
-            <div class="user-login" id="userLoginSection"
-                style="display: flex; flex-direction: column; gap: 1rem; width: 100%;">
-                <h4 id="authFormTitle"
-                    style="font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; margin-bottom: 0.5rem;">Create
-                    Account</h4>
-
-                <div id="usernameFieldContainer" style="display: flex; flex-direction: column; gap: 0.25rem;">
-                    <label
-                        style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Username</label>
-                    <input type="text" id="authUsernameInput" placeholder="Choose a public username..."
-                        style="padding: 0.875rem; border-radius: 12px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); outline: none;">
+            <div class="auth-container" id="userLoginSection">
+                <h4 id="authFormTitle" class="auth-title">Create Account</h4>
+                
+                <div id="usernameFieldContainer" class="auth-input-group">
+                    <label>Username</label>
+                    <input type="text" id="authUsernameInput" class="auth-input" placeholder="Choose a public username...">
                 </div>
 
-                <div style="display: flex; flex-direction: column; gap: 0.25rem;">
-                    <label
-                        style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Email
-                        Address</label>
-                    <input type="email" id="authEmailInput" placeholder="Enter email address..."
-                        style="padding: 0.875rem; border-radius: 12px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); outline: none;">
+                <div class="auth-input-group">
+                    <label>Email Address</label>
+                    <input type="email" id="authEmailInput" class="auth-input" placeholder="Enter email address...">
                 </div>
 
-                <div style="display: flex; flex-direction: column; gap: 0.25rem;">
-                    <label id="passwordLabel"
-                        style="font-size: 0.75rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase;">Create
-                        Password</label>
-                    <input type="password" id="authPasswordInput" placeholder="••••••••"
-                        style="padding: 0.875rem; border-radius: 12px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); outline: none;">
+                <div class="auth-input-group">
+                    <label id="passwordLabel">Create Password</label>
+                    <input type="password" id="authPasswordInput" class="auth-input" placeholder="••••••••">
                 </div>
 
-                <button class="user-login-btn" id="mainAuthBtn"
-                    style="padding: 0.875rem; border-radius: 12px; border: none; background: var(--text-primary); color: var(--bg-primary); font-weight: 600; cursor: pointer; margin-top: 0.5rem;">Create
-                    Account</button>
-
-                <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin: 0.5rem 0;">
-                    <div style="height: 1px; background: var(--border); flex: 1;"></div>
-                    <span style="font-size: 0.75rem; color: var(--text-muted);">Or continue with</span>
-                    <div style="height: 1px; background: var(--border); flex: 1;"></div>
+                <button class="btn-primary" id="mainAuthBtn" style="margin-top: 0.5rem; width: 100%;">Create Account</button>
+                
+                <div class="auth-divider">
+                    <div class="divider-line"></div>
+                    <span>Or continue with</span>
+                    <div class="divider-line"></div>
                 </div>
 
-                <div id="googleButtonTarget" style="width: 100%; display: flex; justify-content: center;"></div>
+                <div id="googleButtonTarget" class="google-btn-wrapper"></div>
 
-                <p style="font-size: 0.8rem; text-align: center; color: var(--text-secondary); margin-top: 1rem;">
-                    <span id="authTogglePrompt">Already have an account?</span>
-                    <a href="#" id="authToggleBtn"
-                        style="color: var(--text-primary); font-weight: 700; text-decoration: none;">Sign In</a>
+                <p class="auth-footer-text">
+                    <span id="authTogglePrompt">Already have an account?</span> 
+                    <a href="#" id="authToggleBtn">Sign In</a>
                 </p>
             </div>
 

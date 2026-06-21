@@ -3198,6 +3198,107 @@ body {
   }
 
   /* ---- RESPONSIVE MOBILE OPTIMIZATIONS (IMAGE 1 & 2 REPLICA) ---- */
+
+  /* ============================================
+   MODERN AUTH FORM & GOOGLE FIX
+   ============================================ */
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+.auth-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+.auth-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.auth-input-group label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.auth-input {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.875rem 1rem;
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+.auth-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+.auth-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: 0.5rem 0;
+}
+.divider-line {
+  height: 1px;
+  background: var(--border);
+  flex: 1;
+}
+.auth-divider span {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+.google-btn-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 8px;
+}
+.auth-footer-text {
+  font-size: 0.8rem;
+  text-align: center;
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+}
+.auth-footer-text a {
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* ============================================
+   PHONE PREVIEW SCALING FIX
+   ============================================ */
+.phone-ui-mock {
+  transform: scale(0.9);
+  transform-origin: top center;
+  width: 100%;
+}
+.phone-notch {
+  top: 0;
+  width: 110px;
+  height: 24px;
+  background: #0a0a0f;
+  border-radius: 0 0 14px 14px;
+}
+.phone-apps-grid {
+  gap: 0.5rem;
+  padding: 0 0.25rem;
+}
+.phone-app-icon svg {
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+}
+
   /* ==========================================
    MOBILE RESPONSIVE (max-width: 640px)
    ========================================== */
