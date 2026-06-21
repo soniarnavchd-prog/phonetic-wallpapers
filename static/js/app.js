@@ -743,10 +743,15 @@ function openUserPanel() {
         if (footer) footer.style.display = 'block';
         loadUserCollections();
     } else {
-        if (userLoginSection) userLoginSection.style.display = 'flex';
+        if (userLoginSection) userLoginSection.style.display = 'block';
         if (userCollections) userCollections.style.display = 'none';
         const footer = document.getElementById('userPanelFooter');
         if (footer) footer.style.display = 'none';
+        
+        // FIXED: Correctly resets the slider variable so the animation works!
+        authMode = 'login'; 
+        const slider = document.getElementById('authSlider');
+        if (slider) slider.style.transform = 'translateX(0)';
     }
 }
 
@@ -900,7 +905,7 @@ function init() {
     initMobileMenu();
 
     loadWallpaperOfTheDay();
-    fetchWallpapers('all');
+    fetchWallpapers('all'); 
     initCategorySwipe();
 
     setTimeout(hideLoadingScreen, 2000);

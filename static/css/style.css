@@ -1125,13 +1125,32 @@ body {
   }
   .skeleton-card { margin: 0; border-radius: 12px; aspect-ratio: 3/4; height: auto; }
 
-  /* Modal */
+  /* Modal - FIXED FOR ACTUAL PHONES */
   .modal-overlay { padding: 0; }
-  .modal-container { max-height: 100vh; border-radius: 0; }
-  .modal-content { padding: 1.5rem 1rem; }
-  .device-btn { padding: 0.625rem 1rem; min-width: 60px; }
-  .preview-frame[data-device="phone"] {
-    width: 240px; height: 480px;
+  .modal-container { max-height: 100vh; border-radius: 0; display: flex; flex-direction: column; }
+  .modal-content { padding: 1rem; flex: 1; display: flex; flex-direction: column; }
+  
+  /* Hides the fake device borders and Desktop/Phone buttons on actual mobile screens */
+  .device-selector, .ui-mock { display: none !important; } 
+  
+  /* Forces the wallpaper to take up the proper width of the phone */
+  .preview-frame[data-device="desktop"],
+  .preview-frame[data-device="phone"],
+  .preview-frame[data-device="tablet"] {
+    width: 100% !important;
+    height: 60vh !important;
+    max-height: none !important;
+    border: none !important;
+    border-radius: 16px !important;
+    margin: 0 0 1.5rem 0 !important;
+    aspect-ratio: auto !important;
+    background: #000;
+  }
+  
+  /* Ensures the wallpaper image perfectly fits without cropping */
+  .preview-frame .preview-image {
+    border-radius: 16px !important;
+    object-fit: contain !important; 
   }
 
   /* Download modal */
