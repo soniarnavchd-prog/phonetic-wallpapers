@@ -73,7 +73,6 @@ const mobileMenuBtn = $('mobileMenuBtn');
 const mobileMenuOverlay = $('mobileMenuOverlay');
 const mobileMenuClose = $('mobileMenuClose');
 
-
 // --- SLIDING AUTH LOGIC ---
 let isSignupForm = false;
 function toggleAuthMode(e) {
@@ -81,7 +80,6 @@ function toggleAuthMode(e) {
     isSignupForm = !isSignupForm;
     const slider = document.getElementById('authSlider');
     if (slider) {
-        // Slides the container left or right
         slider.style.transform = isSignupForm ? 'translateX(-50%)' : 'translateX(0)';
     }
 }
@@ -97,10 +95,8 @@ async function createCollection() {
         return;
     }
 
-    // Visually inject the empty collection immediately
     const list = document.getElementById('collectionsList');
     if (list) {
-        // Remove the "No favorites yet" text if it exists
         if (list.innerHTML.includes('No favorites yet')) {
             list.innerHTML = '';
         }
@@ -117,9 +113,8 @@ async function createCollection() {
     }
 
     showToast(`Collection "${name}" created!`);
-    input.value = ''; // Clear input
+    input.value = '';
 
-    // Bind all current favorite buttons to this new collection
     document.querySelectorAll('.favorite-btn').forEach(btn => {
         btn.dataset.collection = name;
     });
@@ -438,13 +433,10 @@ function initCategories() {
         });
     });
 
-
-    // (Inside initCategories, at the very bottom)
     document.querySelectorAll('.qa-item[data-nav]').forEach(item => {
         item.addEventListener('click', () => {
             const category = item.dataset.nav;
 
-            // Visually activate corresponding bottom nav or pills
             document.querySelectorAll('.mob-nav-item').forEach(l => l.classList.remove('active'));
             document.querySelectorAll('.category-pill').forEach(p => {
                 p.classList.toggle('active', p.dataset.category === category);
@@ -453,13 +445,11 @@ function initCategories() {
             currentCategory = category;
             fetchWallpapers(category);
 
-            // Scroll down to gallery smoothly
             const gallerySection = document.querySelector('.gallery-section');
             if (gallerySection) gallerySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
     });
 
-    // Desktop nav links
     document.querySelectorAll('.nav-link[data-nav]').forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
@@ -665,13 +655,13 @@ async function loadWallpaperOfTheDay() {
 }
 
 // ==================== USER PANEL ====================
-let authMode = 'signup'; // Tracks whether the user is viewing 'Sign Up' or 'Sign In'
+let authMode = 'signup';
 
 function initUserPanel() {
     const savedUser = localStorage.getItem('phonetic_user');
     if (savedUser) {
         currentUser = JSON.parse(savedUser);
-        showUserAvatar(); // Standard account initialization fallback
+        showUserAvatar();
     }
 
     if (accountBtn) accountBtn.addEventListener('click', openUserPanel);
@@ -679,7 +669,6 @@ function initUserPanel() {
     if (userPanelClose) userPanelClose.addEventListener('click', closeUserPanel);
     if (userPanelOverlay) userPanelOverlay.addEventListener('click', closeUserPanel);
 
-    // Wire custom dynamic view modal toggle hooks
     const authToggleBtn = document.getElementById('authToggleBtn');
     const mainAuthBtn = document.getElementById('mainAuthBtn');
 
@@ -695,67 +684,93 @@ function initUserPanel() {
             authToggleBtn.innerText = authMode === 'signup' ? 'Sign In' : 'Sign Up';
             document.getElementById('usernameFieldContainer').style.display = authMode === 'signup' ? 'flex' : 'none';
         });
+    }
 
-        // (Inside initUserPanel, right under your authToggleBtn code)
-        const logoutBtn = document.getElementById('logoutBtn');
-        if (logoutBtn) {
-            logoutBtn.addEventListener('click', () => {
-                currentUser = null;
-                localStorage.removeItem('phonetic_user');
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            currentUser = null;
+            localStorage.removeItem('phonetic_user');
 
-                // Reset UI
-                if (userAvatar) userAvatar.style.display = 'none';
-                if (accountBtn) accountBtn.style.display = 'flex';
+            if (userAvatar) userAvatar.style.display = 'none';
+            if (accountBtn) accountBtn.style.display = 'flex';
 
-                // Re-render Google button
-                if (typeof google !== 'undefined') {
-                    document.getElementById("googleButtonTarget").innerHTML = '';
+            if (typeof google !== 'undefined') {
+                const loginTarget = document.getElementById("googleButtonTargetLogin");
+                const signupTarget = document.getElementById("googleButtonTargetSignup");
+                if (loginTarget) {
+                    loginTarget.innerHTML = '';
                     google.accounts.id.renderButton(
-                        document.getElementById("googleButtonTarget"),
+                        loginTarget,
                         { theme: "outline", size: "large", width: "100%", text: "continue_with" }
                     );
                 }
+                if (signupTarget) {
+                    signupTarget.innerHTML = '';
+                    google.accounts.id.renderButton(
+                        signupTarget,
+                        { theme: "outline", size: "large", width: "100%", text: "continue_with" }
+                    );
+                }
+            }
 
-                closeUserPanel();
-                showToast('Logged out successfully');
+            closeUserPanel();
+            showToast('Logged out successfully');
 
-                // Un-heart everything visually
-                document.querySelectorAll('.favorite-btn').forEach(btn => btn.classList.remove('active'));
-            });
-        }
+            document.querySelectorAll('.favorite-btn').forEach(btn => btn.classList.remove('active'));
+        });
     }
 
-    if (mainAuthBtn) {
-        mainAuthBtn.addEventListener('click', handleCustomAuth);
-    }
-
-    // Initialize Google Single-Sign-On Overlay safely via SDK hooks
     if (typeof google !== 'undefined') {
         google.accounts.id.initialize({
-            client_id: "935635974021-nfd0b1u8vkdeck1o1cc9afduipi8h6vm.apps.googleusercontent.com", // <-- PASTE YOUR KEY HERE
+            client_id: "935635974021-nfd0b1u8vkdeck1o1cc9afduipi8h6vm.apps.googleusercontent.com",
             callback: handleGoogleCredentialResponse
         });
-        google.accounts.id.renderButton(
-            document.getElementById("googleButtonTarget"),
-            { theme: "outline", size: "large", width: "100%", text: "continue_with" }
-        );
+        const loginTarget = document.getElementById("googleButtonTargetLogin");
+        const signupTarget = document.getElementById("googleButtonTargetSignup");
+        if (loginTarget) {
+            google.accounts.id.renderButton(
+                loginTarget,
+                { theme: "outline", size: "large", width: "100%", text: "continue_with" }
+            );
+        }
+        if (signupTarget) {
+            google.accounts.id.renderButton(
+                signupTarget,
+                { theme: "outline", size: "large", width: "100%", text: "continue_with" }
+            );
+        }
     }
 }
 
-// --- NEW AUTHENTICATION HELPER FUNCTIONS (Keep these right below initUserPanel) ---
+// --- NEW AUTHENTICATION HELPER FUNCTIONS ---
 
-async function handleCustomAuth() {
-    const email = document.getElementById('authEmailInput').value.trim();
-    const password = document.getElementById('authPasswordInput').value.trim();
-    const username = document.getElementById('authUsernameInput') ? document.getElementById('authUsernameInput').value.trim() : "";
+async function handleCustomAuth(mode) {
+    const isSignup = mode === 'signup';
+    const emailId = isSignup ? 'signupEmail' : 'loginEmail';
+    const passwordId = isSignup ? 'signupPassword' : 'loginPassword';
+    const usernameId = 'signupUsername';
+    
+    const emailInput = document.getElementById(emailId);
+    const passwordInput = document.getElementById(passwordId);
+    const usernameInput = document.getElementById(usernameId);
+    
+    if (!emailInput || !passwordInput) {
+        showToast('Form elements not found');
+        return;
+    }
+    
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+    const username = isSignup && usernameInput ? usernameInput.value.trim() : "";
 
-    if (!email || !password || (authMode === 'signup' && !username)) {
+    if (!email || !password || (isSignup && !username)) {
         showToast('Please fill in all required fields');
         return;
     }
 
-    const endpoint = authMode === 'signup' ? '/api/auth/signup' : '/api/auth/login';
-    const bodyPayload = authMode === 'signup'
+    const endpoint = isSignup ? '/api/auth/signup' : '/api/auth/login';
+    const bodyPayload = isSignup
         ? `username=${encodeURIComponent(username)}&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
         : `email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
 
@@ -805,7 +820,6 @@ function showUserAvatar() {
     userAvatar.style.display = 'flex';
     if (accountBtn) accountBtn.style.display = 'none';
 
-    // Show logout footer when logged in
     const footer = document.getElementById('userPanelFooter');
     if (footer) footer.style.display = 'block';
 }
@@ -880,15 +894,6 @@ async function loadUserCollections() {
 
 function renderCollectionSection(name, items) {
     return `<div class="collection-section"><div class="collection-header"><span class="collection-name">${name}</span><span class="collection-count">${items.length}</span></div>${items.map(item => `<div class="favorite-item" onclick="openModalFromFavorite(${item.wallpaper.id})"><img src="${item.wallpaper.thumbnail_url || item.wallpaper.image_url}" alt="${item.wallpaper.title}" onerror="this.src='${item.wallpaper.image_url}'"><div class="favorite-item-info"><div class="favorite-item-title">${item.wallpaper.title}</div><div class="favorite-item-cat">${capitalize(item.wallpaper.category)}</div></div></div>`).join('')}</div>`;
-}
-
-async function createCollection() {
-    if (!newCollectionInput) return;
-    const name = newCollectionInput.value.trim();
-    if (!name) { showToast('Enter a collection name'); return; }
-    showToast(`Collection "${name}" ready! Heart wallpapers to add them.`);
-    newCollectionInput.value = '';
-    document.querySelectorAll('.favorite-btn').forEach(btn => { btn.dataset.collection = name; });
 }
 
 function openModalFromFavorite(wallpaperId) {
