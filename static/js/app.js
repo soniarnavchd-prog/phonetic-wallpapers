@@ -73,6 +73,58 @@ const mobileMenuBtn = $('mobileMenuBtn');
 const mobileMenuOverlay = $('mobileMenuOverlay');
 const mobileMenuClose = $('mobileMenuClose');
 
+
+// --- SLIDING AUTH LOGIC ---
+let isSignupForm = false;
+function toggleAuthMode(e) {
+    e.preventDefault();
+    isSignupForm = !isSignupForm;
+    const slider = document.getElementById('authSlider');
+    if (slider) {
+        // Slides the container left or right
+        slider.style.transform = isSignupForm ? 'translateX(-50%)' : 'translateX(0)';
+    }
+}
+
+// --- FIXED CREATE COLLECTION LOGIC ---
+async function createCollection() {
+    const input = document.getElementById('newCollectionInput');
+    if (!input) return;
+
+    const name = input.value.trim();
+    if (!name) {
+        showToast('Please enter a collection name');
+        return;
+    }
+
+    // Visually inject the empty collection immediately
+    const list = document.getElementById('collectionsList');
+    if (list) {
+        // Remove the "No favorites yet" text if it exists
+        if (list.innerHTML.includes('No favorites yet')) {
+            list.innerHTML = '';
+        }
+
+        const newEmptyHtml = `
+            <div class="collection-section">
+                <div class="collection-header">
+                    <span class="collection-name">${name}</span>
+                    <span class="collection-count">0</span>
+                </div>
+                <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom: 0.5rem;">Empty collection. Heart wallpapers to add!</p>
+            </div>`;
+        list.insertAdjacentHTML('afterbegin', newEmptyHtml);
+    }
+
+    showToast(`Collection "${name}" created!`);
+    input.value = ''; // Clear input
+
+    // Bind all current favorite buttons to this new collection
+    document.querySelectorAll('.favorite-btn').forEach(btn => {
+        btn.dataset.collection = name;
+    });
+}
+
 // ==================== CONSTANTS ====================
 const CATEGORY_NAMES = {
     'all': 'All Wallpapers', 'abstract': 'Abstract', 'amoled': 'AMOLED',
