@@ -296,8 +296,9 @@ function initContextMenu() {
 }
 
 // ==================== DOWNLOAD MODAL ====================
+// ==================== DOWNLOAD MODAL ====================
 function showDownloadModal(wallpaper, isPremium = false) {
-    // NEW: Guest Download Limit Logic
+    // Guest Download Limit Logic
     if (!currentUser) {
         let guestCount = parseInt(localStorage.getItem('phonetic_guest_downloads') || '0');
         if (guestCount >= 10) {
@@ -323,6 +324,22 @@ function showDownloadModal(wallpaper, isPremium = false) {
     const circumference = 2 * Math.PI * 15.9155;
     countdownRing.style.strokeDasharray = `${circumference} ${circumference}`;
     countdownRing.style.strokeDashoffset = 0;
+
+    // FIXED TIMER LOGIC
+    const timer = setInterval(() => {
+        countdown--;
+        countdownNumber.textContent = countdown;
+        countdownRing.style.strokeDashoffset = circumference - (countdown / 5) * circumference;
+        
+        if (countdown <= 0) {
+            clearInterval(timer);
+            downloadPhase1.classList.add('hidden');
+            downloadPhase2.classList.remove('hidden');
+            
+            setTimeout(() => proceedWithDownload(wallpaper), 600);
+            setTimeout(() => downloadModal.classList.remove('active'), 3500);
+        }
+    }, 1000);
 }
 
 function proceedWithDownload(wallpaper) {
@@ -333,23 +350,34 @@ function proceedWithDownload(wallpaper) {
 
 async function downloadWallpaper(url, filename) {
     try {
-        showToast('Preparing download...');
+        showToast('Preparing high-quality download...');
+        // Try to fetch the image to force a silent background download
         const response = await fetch(url);
         if (!response.ok) throw new Error('Network error');
         const blob = await response.blob();
         const blobUrl = window.URL.createObjectURL(blob);
+        
         const a = document.createElement('a');
+        a.style.display = 'none';
         a.href = blobUrl;
         a.download = filename;
         document.body.appendChild(a);
         a.click();
-        document.body.removeChild(a);
+        
         window.URL.revokeObjectURL(blobUrl);
-        showToast('Download started!');
+        document.body.removeChild(a);
+        showToast('Download started successfully!');
     } catch (error) {
-        console.error('Download failed:', error);
-        window.open(url, '_blank');
-        showToast('Opening image in new tab...');
+        console.error('Direct download blocked by browser CORS:', error);
+        // BULLETPROOF FALLBACK: If browser blocks silent download, force open the HD image
+        const a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank'; // Opens safely in new tab to bypass security block
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showToast('Opening high-res image safely...');
     }
 }
 
