@@ -643,13 +643,13 @@ function initUserPanel() {
         if (loginTarget) {
             google.accounts.id.renderButton(
                 loginTarget,
-                { theme: "outline", size: "large", width: "100%", text: "continue_with" }
+                { theme: "outline", size: "large", width: "260", text: "continue_with" }
             );
         }
         if (signupTarget) {
             google.accounts.id.renderButton(
                 signupTarget,
-                { theme: "outline", size: "large", width: "100%", text: "continue_with" }
+                { theme: "outline", size: "large", width: "260", text: "continue_with" }
             );
         }
     }
