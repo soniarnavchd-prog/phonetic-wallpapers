@@ -2665,6 +2665,44 @@ body {
 }
 
 /* ============================================
+   COLLECTIONS ACCORDION FIX
+   ============================================ */
+.collection-items {
+  display: none; /* Hides the massive list by default */
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+  animation: slideDown 0.3s ease;
+}
+.collection-section.expanded .collection-items {
+  display: block; /* Shows the list when clicked */
+}
+.collection-section.expanded .collection-header {
+  background: var(--bg-tertiary) !important;
+  border-bottom-left-radius: 4px !important;
+  border-bottom-right-radius: 4px !important;
+}
+.col-chevron { transition: transform 0.3s ease; }
+.collection-section.expanded .col-chevron { transform: rotate(180deg); }
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Better theme icon centering for mobile touch targets */
+.theme-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.theme-icon {
+  position: absolute !important;
+  inset: 0;
+  margin: auto;
+}
+
+/* ============================================
    RESPONSIVE - MOBILE (max-width: 640px)
    ALL MOBILE OVERRIDES IN ONE FLAT BLOCK
    ============================================ */

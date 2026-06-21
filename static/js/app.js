@@ -105,13 +105,8 @@ function initTheme() {
     document.documentElement.setAttribute('data-theme', saved);
     console.log('Theme initialized:', saved);
 }
-function toggleTheme() {
-    const current = document.documentElement.getAttribute('data-theme');
-    const next = current === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('theme', next);
-    console.log('Theme toggled to:', next);
-}
+
+
 
 // ==================== SKELETONS ====================
 function createSkeletonCard() {
@@ -178,6 +173,12 @@ async function checkFavorite(wallpaperId) {
         const data = await response.json();
         return data.is_favorite;
     } catch (e) { return false; }
+}
+function toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme') || 'dark';
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('theme', next);
 }
 
 async function toggleFavorite(wallpaperId, btn) {
@@ -296,10 +297,23 @@ function initContextMenu() {
 
 // ==================== DOWNLOAD MODAL ====================
 function showDownloadModal(wallpaper, isPremium = false) {
+    // NEW: Guest Download Limit Logic
+    if (!currentUser) {
+        let guestCount = parseInt(localStorage.getItem('phonetic_guest_downloads') || '0');
+        if (guestCount >= 10) {
+            showToast('Limit reached (10/10). Please sign in to download more!');
+            setTimeout(openUserPanel, 1000);
+            return; // Stops the download
+        }
+        localStorage.setItem('phonetic_guest_downloads', guestCount + 1);
+        showToast(`Guest Download: ${guestCount + 1} of 10`);
+    }
+
     if (!downloadModal || !downloadPhase1 || !downloadPhase2 || !countdownNumber || !countdownRing) {
         proceedWithDownload(wallpaper);
         return;
     }
+
     downloadPhase1.classList.remove('hidden');
     downloadPhase2.classList.add('hidden');
     downloadModal.classList.add('active');
@@ -309,19 +323,6 @@ function showDownloadModal(wallpaper, isPremium = false) {
     const circumference = 2 * Math.PI * 15.9155;
     countdownRing.style.strokeDasharray = `${circumference} ${circumference}`;
     countdownRing.style.strokeDashoffset = 0;
-
-    const timer = setInterval(() => {
-        countdown--;
-        countdownNumber.textContent = countdown;
-        countdownRing.style.strokeDashoffset = circumference - (countdown / 5) * circumference;
-        if (countdown <= 0) {
-            clearInterval(timer);
-            downloadPhase1.classList.add('hidden');
-            downloadPhase2.classList.remove('hidden');
-            setTimeout(() => proceedWithDownload(wallpaper), 600);
-            setTimeout(() => downloadModal.classList.remove('active'), 3500);
-        }
-    }, 1000);
 }
 
 function proceedWithDownload(wallpaper) {
@@ -785,7 +786,19 @@ async function loadUserCollections() {
 }
 
 function renderCollectionSection(name, items) {
-    return `<div class="collection-section"><div class="collection-header"><span class="collection-name">${name}</span><span class="collection-count">${items.length}</span></div>${items.map(item => `<div class="favorite-item" onclick="openModalFromFavorite(${item.wallpaper.id})"><img src="${item.wallpaper.thumbnail_url || item.wallpaper.image_url}" alt="${item.wallpaper.title}" onerror="this.src='${item.wallpaper.image_url}'"><div class="favorite-item-info"><div class="favorite-item-title">${item.wallpaper.title}</div><div class="favorite-item-cat">${capitalize(item.wallpaper.category)}</div></div></div>`).join('')}</div>`;
+    return `
+    <div class="collection-section" style="margin-bottom: 0.5rem;">
+        <div class="collection-header" onclick="this.parentElement.classList.toggle('expanded')" style="cursor:pointer; display:flex; justify-content:space-between; align-items:center; padding: 0.875rem 1rem; background: var(--bg-hover); border-radius: 12px; transition: all 0.2s;">
+            <span class="collection-name" style="font-weight:600; font-size: 0.9375rem;">${name}</span>
+            <div style="display:flex; align-items:center; gap:0.5rem;">
+                <span class="collection-count" style="font-size: 0.75rem; color: var(--text-muted); background: var(--bg-card); padding: 0.25rem 0.5rem; border-radius: 10px;">${items.length} items</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="col-chevron"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+        </div>
+        <div class="collection-items">
+            ${items.map(item => `<div class="favorite-item" onclick="openModalFromFavorite(${item.wallpaper.id})"><img src="${item.wallpaper.thumbnail_url || item.wallpaper.image_url}" alt="${item.wallpaper.title}" onerror="this.src='${item.wallpaper.image_url}'"><div class="favorite-item-info"><div class="favorite-item-title">${item.wallpaper.title}</div><div class="favorite-item-cat">${capitalize(item.wallpaper.category)}</div></div></div>`).join('')}
+        </div>
+    </div>`;
 }
 
 async function createCollection() {
